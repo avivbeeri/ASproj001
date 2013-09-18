@@ -1,0 +1,35 @@
+Basic guide to using git
+
+Key Commands:
+
+git clone - Copies the repo to your hard drive
+git add <file names> - adds a file to be tracked by git, or adds it to the files to be commited, "The files are staged"
+git commit -a -m "Useful message about what changed" - saves all the staged files permenantly.
+git push - send your commits to the repo
+git pull - get the changes to the repo others made
+git status - Shows you which files changed, which are staged and ready to commit
+git log - see a listing of when, who and what changed, throughout the project.
+
+
+What to do to use Git, for beginners:
+
+When you start programming, always do a "git pull" to get the latest version.
+You might want to use "git log" to see what changed, before continuing.
+
+IMPORTANT: If you create a new file, you must perform a "git add <filename>" to it. The same for directories/folders.
+
+Make your changes. Now you need to "stage" your changes, that is, select all the files you changed in a related manner. For example, if i change 3 files to implement a feature, i would "git add <all their file names>".
+
+Now they are staged, i can do 'git commit -m "A meaningful message about what i implemented" ' and this will add it to the project history.
+
+A shortcut: If i am committing all the currently changed files, ignore the "git add" and instead do ' git commit -a -m "Meaning message" ' The -a tells git to select all changed files, but it will ignore files you haven't "git add"ed yet..
+
+Frequently "git push" your changes back up to the repository, so we can all pull down again.
+
+IMPORTANT: Make sure when you finish to push, also. Otherwise no one can see what changed.
+
+We need to try to avoid working on the same regions of code, or git will require some help working out what changed. Its clever, but it isn't perfect.
+If/When this happens, I am happy to help walk you through the steps to sort it out, as long as we are in the same room at the time :)
+
+
+
