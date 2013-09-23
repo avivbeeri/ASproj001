@@ -33,7 +33,11 @@ int main(int argc, char **argv)
   int pos_x = 320;
   int pos_y = 240;
   Beat b;
+  Beat b2;
   init_beat(b);
+  init_beat(b2);
+  b2.x = 100;
+  b2.y = -30;
   if(!al_init()) {
      fprintf(stderr, "failed to initialize allegro!\n");
      return -1;
@@ -91,6 +95,9 @@ int main(int argc, char **argv)
       if (b.live) {
         update_beat(b);
       }
+      if (b2.live) {
+        update_beat(b2);
+      }
       redraw = true;
     }
     
@@ -110,8 +117,11 @@ int main(int argc, char **argv)
           break; 
       }
       //Process given button presses here
-      if (b.y >= HEIGHT - 10 && pressed[UP]) {
+      if (b.y >= HEIGHT - 100 && pressed[UP]) {
         b.live = false;
+      }
+      if (b2.y >= HEIGHT - 100 && pressed[LEFT]) {
+        b2.live = false;
       }
     } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
       switch(ev.keyboard.keycode) {
@@ -138,9 +148,10 @@ int main(int argc, char **argv)
       //time to redraw the screen
  		  redraw = false;
       draw_beat(b);
+      draw_beat(b2);
  		  //draw things
       al_draw_filled_circle(pos_x, pos_y, 10, al_map_rgb(255,0,255));
-      al_draw_line(0,HEIGHT-11, w-1, HEIGHT-11, al_map_rgb(255,255,255), 3);
+      al_draw_line(0,HEIGHT-100, w-1, HEIGHT-100, al_map_rgb(255,255,255), 3);
       
  		 //Display and reset buffer
  		  al_flip_display();
