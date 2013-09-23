@@ -2,8 +2,22 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "objects.h"
+
+
+
+
+//prototypes
+void init_beat(Beat &beat);
+void update_beat(Beat &beat);
+void draw_beat(Beat &beat);
+
 enum key { UP, DOWN, LEFT, RIGHT };
+
+//Globals
 const float FPS = 60;
+const int HEIGHT = 480;
+const int WIDTH = 640;
 
 int main(int argc, char **argv)
 {
@@ -18,8 +32,8 @@ int main(int argc, char **argv)
 
   int pos_x = 320;
   int pos_y = 240;
-
- 
+  Beat b;
+  init_beat(b);
   if(!al_init()) {
      fprintf(stderr, "failed to initialize allegro!\n");
      return -1;
@@ -32,8 +46,8 @@ int main(int argc, char **argv)
   al_set_new_display_flags(ALLEGRO_FULLSCREEN);
   */
   
-  int w = 640;
-  int h = 480;
+  int w = WIDTH;
+  int h = HEIGHT;
   display = al_create_display(w, h);
   if(!display) {
      fprintf(stderr, "failed to create display!\n");
@@ -74,7 +88,9 @@ int main(int argc, char **argv)
  	    pos_y -= pressed[UP] * 10;
  	    pos_x += pressed[RIGHT] * 10;
  	    pos_x -= pressed[LEFT] * 10;
-
+      if (b.live) {
+        update_beat(b);
+      }
       redraw = true;
     }
     
@@ -92,6 +108,10 @@ int main(int argc, char **argv)
         case ALLEGRO_KEY_RIGHT: 
  				  pressed[RIGHT] = true;
           break; 
+      }
+      //Process given button presses here
+      if (b.y >= HEIGHT - 10 && pressed[UP]) {
+        b.live = false;
       }
     } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
       switch(ev.keyboard.keycode) {
@@ -117,10 +137,10 @@ int main(int argc, char **argv)
  	  if (redraw && al_is_event_queue_empty(event_queue)) {
       //time to redraw the screen
  		  redraw = false;
-
+      draw_beat(b);
  		  //draw things
       al_draw_filled_circle(pos_x, pos_y, 10, al_map_rgb(255,0,255));
-      al_draw_line(0,h-1, w-1, h-1, al_map_rgb(255,255,255), 1);
+      al_draw_line(0,HEIGHT-11, w-1, HEIGHT-11, al_map_rgb(255,255,255), 3);
       
  		 //Display and reset buffer
  		  al_flip_display();
@@ -132,4 +152,24 @@ int main(int argc, char **argv)
   al_destroy_event_queue(event_queue);
   al_destroy_display(display);
   return 0;
+
+}
+
+void init_beat(Beat &beat) {
+  beat.x = 50;
+  beat.y = 0;
+  beat.speed = 2;
+  beat.type = 0;
+  beat.live = true;
+}
+
+void update_beat(Beat &beat) {
+  beat.y += beat.speed;
+  if (beat.y > HEIGHT) {
+    beat.y = 0;
+  }
+}
+
+void draw_beat(Beat &beat) {
+  al_draw_filled_circle(beat.x, beat.y, 2, al_map_rgb(255,0,255));
 }
