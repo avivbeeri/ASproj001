@@ -11,3 +11,10 @@
 *.lai
 *.la
 *.a
+
+# Compiled Header files
+*.h.gch
+*.h.swp
+
+# Final Compiled Game
+game
