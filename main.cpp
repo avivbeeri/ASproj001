@@ -3,9 +3,8 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "objects.h"
-
-
-
+#include "entity.h"
+#include "bitmap.h"
 
 //prototypes
 void init_beat(Beat &beat);
@@ -32,12 +31,9 @@ int main(int argc, char **argv)
 
   int pos_x = 320;
   int pos_y = 240;
-  Beat b;
-  Beat b2;
-  init_beat(b);
-  init_beat(b2);
-  b2.x = 100;
-  b2.y = -30;
+  Entity beat1(50, 0);
+  Entity beat2(100, 0);
+  
   if(!al_init()) {
      fprintf(stderr, "failed to initialize allegro!\n");
      return -1;
@@ -60,6 +56,17 @@ int main(int argc, char **argv)
 
   al_init_primitives_addon();
   al_install_keyboard();
+
+  ALLEGRO_BITMAP * image = al_create_bitmap(4, 4);
+  al_set_target_bitmap(image);
+  al_clear_to_color(al_map_rgb(0,0,0));
+  al_draw_filled_circle(2, 2, 2, al_map_rgb(255,0,255));
+  al_set_target_bitmap(al_get_backbuffer(display));
+  
+  Bitmap b(image);
+
+  beat1.setSprite(&b);
+  beat2.setSprite(&b);
 
   event_queue = al_create_event_queue();
   if (event_queue == NULL) {
@@ -88,16 +95,15 @@ int main(int argc, char **argv)
     al_wait_for_event(event_queue, &ev);
     if (ev.type == ALLEGRO_EVENT_TIMER) {
     
- 	    pos_y += pressed[DOWN] * 10;
- 	    pos_y -= pressed[UP] * 10;
- 	    pos_x += pressed[RIGHT] * 10;
- 	    pos_x -= pressed[LEFT] * 10;
-      if (b.live) {
-        update_beat(b);
-      }
-      if (b2.live) {
-        update_beat(b2);
-      }
+      pos_y += pressed[DOWN] * 10;
+      pos_y -= pressed[UP] * 10;
+      pos_x += pressed[RIGHT] * 10;
+      pos_x -= pressed[LEFT] * 10;
+      
+      if (beat1.isLive()) 
+        beat1.setY(beat1.getY() + 5);
+      if (beat2.isLive())
+        beat2.setY(beat1.getY() + 5);
       redraw = true;
     }
     
@@ -117,11 +123,11 @@ int main(int argc, char **argv)
           break; 
       }
       //Process given button presses here
-      if (b.y >= HEIGHT - 100 && pressed[UP]) {
-        b.live = false;
+      if (beat1.getY() >= HEIGHT - 100 && pressed[UP]) {
+        beat1.setLive(false);
       }
-      if (b2.y >= HEIGHT - 100 && pressed[LEFT]) {
-        b2.live = false;
+      if (beat2.getY() >= HEIGHT - 100 && pressed[LEFT]) {
+        beat2.setLive(false);
       }
     } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
       switch(ev.keyboard.keycode) {
@@ -147,8 +153,9 @@ int main(int argc, char **argv)
  	  if (redraw && al_is_event_queue_empty(event_queue)) {
       //time to redraw the screen
  		  redraw = false;
-      draw_beat(b);
-      draw_beat(b2);
+      
+      beat1.update();
+      beat2.update();
  		  //draw things
       al_draw_filled_circle(pos_x, pos_y, 10, al_map_rgb(255,0,255));
       al_draw_line(0,HEIGHT-100, w-1, HEIGHT-100, al_map_rgb(255,255,255), 3);
@@ -158,29 +165,10 @@ int main(int argc, char **argv)
       al_clear_to_color(al_map_rgb(0,0,0));
     }
   }
-  
+  al_destroy_bitmap(image);  
   al_destroy_timer(timer);
   al_destroy_event_queue(event_queue);
   al_destroy_display(display);
   return 0;
 
-}
-
-void init_beat(Beat &beat) {
-  beat.x = 50;
-  beat.y = 0;
-  beat.speed = 2;
-  beat.type = 0;
-  beat.live = true;
-}
-
-void update_beat(Beat &beat) {
-  beat.y += beat.speed;
-  if (beat.y > HEIGHT) {
-    beat.y = 0;
-  }
-}
-
-void draw_beat(Beat &beat) {
-  al_draw_filled_circle(beat.x, beat.y, 2, al_map_rgb(255,0,255));
 }

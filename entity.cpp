@@ -15,11 +15,11 @@ Entity::Entity(int x, int y) {
   live = true;
 }
 
-/*
+
 Entity::~Entity() {
   //Empty destructor
 }
-*/
+
 
 void Entity::setLive(bool live) {
   this->live = live;
@@ -39,6 +39,10 @@ int Entity::getX() {
 
 int Entity::getY() {
   return y;
+}
+
+bool Entity::isLive() {
+  return live;
 }
 
 void Entity::setSprite(Drawable * spritePtr) {
