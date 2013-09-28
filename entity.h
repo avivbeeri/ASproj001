@@ -1,3 +1,6 @@
+#ifndef ENTITY_H
+#define ENTITY_H
+
 #include "drawable.h"
 
 class Entity
@@ -20,3 +23,5 @@ class Entity
     bool live;
     Drawable * sprite;
 };
+
+#endif
