@@ -1,10 +1,15 @@
 #include <stdio.h>
+#include <string>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_image.h>
 
 #include "objects.h"
 #include "entity.h"
 #include "bitmap.h"
+#include "sprite.h"
+
+using std::string;
 
 //prototypes
 void init_beat(Beat &beat);
@@ -55,8 +60,12 @@ int main(int argc, char **argv)
   }
 
   al_init_primitives_addon();
+  al_init_image_addon();
   al_install_keyboard();
 
+  string str = "assets/art/arrow_blue.png";
+  Sprite arrow(str);
+  /*
   ALLEGRO_BITMAP * image = al_create_bitmap(4, 4);
   al_set_target_bitmap(image);
   al_clear_to_color(al_map_rgb(0,0,0));
@@ -64,9 +73,9 @@ int main(int argc, char **argv)
   al_set_target_bitmap(al_get_backbuffer(display));
   
   Bitmap b(image);
-
-  beat1.setSprite(&b);
-  beat2.setSprite(&b);
+  */
+  beat1.setSprite(&arrow);
+  beat2.setSprite(&arrow);
 
   event_queue = al_create_event_queue();
   if (event_queue == NULL) {
@@ -165,7 +174,7 @@ int main(int argc, char **argv)
       al_clear_to_color(al_map_rgb(0,0,0));
     }
   }
-  al_destroy_bitmap(image);  
+  //al_destroy_bitmap(image);  
   al_destroy_timer(timer);
   al_destroy_event_queue(event_queue);
   al_destroy_display(display);
