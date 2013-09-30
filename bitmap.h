@@ -1,3 +1,6 @@
+#ifndef BITMAP_H
+#define BITMAP_H
+
 #include <allegro5/allegro.h>
 #include "drawable.h"
 
@@ -9,3 +12,5 @@ class Bitmap : public Drawable
   private:
     ALLEGRO_BITMAP *image;
 };
+
+#endif
