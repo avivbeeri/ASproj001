@@ -1,9 +1,12 @@
 #include <allegro5/allegro.h>
 #include "sprite.h"
 	
-Sprite::Sprite(char * str) {
+Sprite::Sprite(string str) {
 	//file existence error checking
-	image = al_load_bitmap(str);
+	image = al_load_bitmap(str.c_str());
+	if (image == NULL) {
+		//Serious error, kill the game.
+	}
 }
 
 Sprite::~Sprite() {
