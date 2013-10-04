@@ -18,12 +18,12 @@
 
 using std::string;
 
-enum key { UP, DOWN, LEFT, RIGHT , ESCAPE, BTN_A, BTN_S, BTN_D, BTN_F};
+enum key { UP, DOWN, LEFT, RIGHT , ESCAPE, KEY_A, KEY_S, KEY_D, KEY_F};
 
 //Globals
 const float FPS = 60;
-const int HEIGHT = 480;
-const int WIDTH = 640;
+const int HEIGHT = 540;
+const int WIDTH = 1010;
 
 int main(int argc, char **argv)
 {
@@ -203,7 +203,6 @@ int main(int argc, char **argv)
       al_clear_to_color(al_map_rgb(0,0,0));
     }
   }
-  //al_destroy_bitmap(image);  
   al_destroy_timer(timer);
   al_destroy_event_queue(event_queue);
   al_destroy_display(display);
