@@ -1,22 +1,24 @@
+//Standard libs
 #include <stdio.h>
+#include <iostream>
 #include <string>
+
+//Allegro libs
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
 
-#include "objects.h"
+//local files
 #include "entity.h"
 #include "bitmap.h"
 #include "sprite.h"
+#include "player.h"
+
 
 using std::string;
 
-//prototypes
-void init_beat(Beat &beat);
-void update_beat(Beat &beat);
-void draw_beat(Beat &beat);
-
-enum key { UP, DOWN, LEFT, RIGHT };
+enum key { UP, DOWN, LEFT, RIGHT , ESCAPE, BTN_A, BTN_S, BTN_D, BTN_F};
 
 //Globals
 const float FPS = 60;
@@ -30,12 +32,11 @@ int main(int argc, char **argv)
   ALLEGRO_MONITOR_INFO info;
   ALLEGRO_TIMER *timer = NULL;
   
-  bool pressed[4] = {false, false, false, false};
+  bool pressed[9] = {false, false, false, false, 
+		     false, false, false, false, false};
   bool done = false;
   bool redraw = false;
 
-  int pos_x = 320;
-  int pos_y = 240;
   Entity beat1(50, 0);
   Entity beat2(100, 0);
   
@@ -61,7 +62,11 @@ int main(int argc, char **argv)
 
   al_init_primitives_addon();
   al_init_image_addon();
-  al_install_keyboard();
+  al_init_font_addon();
+
+  //Resource initialisation
+
+  RhythmPlayer player;
 
   string str = "assets/art/arrow_blue.png";
   Sprite arrow(str);
@@ -77,6 +82,8 @@ int main(int argc, char **argv)
   beat1.setSprite(&arrow);
   beat2.setSprite(&arrow);
 
+  //Initialise event handling
+  al_install_keyboard();
   event_queue = al_create_event_queue();
   if (event_queue == NULL) {
     fprintf(stderr, "failed to initialize event queue!\n");
@@ -103,12 +110,8 @@ int main(int argc, char **argv)
   while (!done) {
     al_wait_for_event(event_queue, &ev);
     if (ev.type == ALLEGRO_EVENT_TIMER) {
-    
-      pos_y += pressed[DOWN] * 10;
-      pos_y -= pressed[UP] * 10;
-      pos_x += pressed[RIGHT] * 10;
-      pos_x -= pressed[LEFT] * 10;
-      
+      //Update entities
+ 
       if (beat1.isLive()) 
         beat1.setY(beat1.getY() + 5);
       if (beat2.isLive())
@@ -119,16 +122,31 @@ int main(int argc, char **argv)
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
  		  switch(ev.keyboard.keycode) {
         case ALLEGRO_KEY_UP: 
- 				  pressed[UP] = true;
+          pressed[UP] = true;
           break; 
         case ALLEGRO_KEY_DOWN: 
- 				  pressed[DOWN] = true;
+          pressed[DOWN] = true;
           break; 
         case ALLEGRO_KEY_LEFT: 
- 				  pressed[LEFT] = true;
+          pressed[LEFT] = true;
           break; 
         case ALLEGRO_KEY_RIGHT: 
- 				  pressed[RIGHT] = true;
+          pressed[RIGHT] = true;
+          break; 
+        case ALLEGRO_KEY_A: 
+          pressed[KEY_A] = true;
+          break; 
+        case ALLEGRO_KEY_S: 
+          pressed[KEY_S] = true;
+          break; 
+        case ALLEGRO_KEY_D: 
+          pressed[KEY_D] = true;
+          break; 
+        case ALLEGRO_KEY_F: 
+          pressed[KEY_F] = true;
+          break; 
+        case ALLEGRO_KEY_ESCAPE: 
+          pressed[ESCAPE] = true;
           break; 
       }
       //Process given button presses here
@@ -152,9 +170,21 @@ int main(int argc, char **argv)
         case ALLEGRO_KEY_RIGHT: 
  				  pressed[RIGHT] = false;
           break; 
-        case ALLEGRO_KEY_ESCAPE:
-          done = true;
-          break;
+        case ALLEGRO_KEY_A: 
+          pressed[KEY_A] = false;
+          break; 
+        case ALLEGRO_KEY_S: 
+          pressed[KEY_S] = false;
+          break; 
+        case ALLEGRO_KEY_D: 
+          pressed[KEY_D] = false;
+          break; 
+        case ALLEGRO_KEY_F: 
+          pressed[KEY_F] = false;
+          break; 
+        case ALLEGRO_KEY_ESCAPE: 
+          pressed[ESCAPE] = false;
+          break; 
       }
     } else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
       done = true;
@@ -166,7 +196,6 @@ int main(int argc, char **argv)
       beat1.update();
       beat2.update();
  		  //draw things
-      al_draw_filled_circle(pos_x, pos_y, 10, al_map_rgb(255,0,255));
       al_draw_line(0,HEIGHT-100, w-1, HEIGHT-100, al_map_rgb(255,255,255), 3);
       
  		 //Display and reset buffer
