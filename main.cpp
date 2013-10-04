@@ -13,11 +13,14 @@
 #include "entity.h"
 #include "bitmap.h"
 #include "sprite.h"
+#include "track.h"
 #include "player.h"
 
+//prototypes
+void drawTrack(int x);
 
+//declarations
 using std::string;
-
 enum key { UP, DOWN, LEFT, RIGHT , ESCAPE, KEY_A, KEY_S, KEY_D, KEY_F};
 
 //Globals
@@ -70,6 +73,7 @@ int main(int argc, char **argv)
 
   string str = "assets/art/arrow_blue.png";
   Sprite arrow(str);
+  Track track;
   /*
   ALLEGRO_BITMAP * image = al_create_bitmap(4, 4);
   al_set_target_bitmap(image);
@@ -159,16 +163,16 @@ int main(int argc, char **argv)
     } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
       switch(ev.keyboard.keycode) {
         case ALLEGRO_KEY_UP: 
- 				  pressed[UP] = false;
+	  pressed[UP] = false;
           break; 
         case ALLEGRO_KEY_DOWN: 
- 				  pressed[DOWN] = false;
+ 	  pressed[DOWN] = false;
           break; 
         case ALLEGRO_KEY_LEFT: 
- 				  pressed[LEFT] = false;
+ 	  pressed[LEFT] = false;
           break; 
         case ALLEGRO_KEY_RIGHT: 
- 				  pressed[RIGHT] = false;
+ 	  pressed[RIGHT] = false;
           break; 
         case ALLEGRO_KEY_A: 
           pressed[KEY_A] = false;
@@ -191,15 +195,16 @@ int main(int argc, char **argv)
     }
  	  if (redraw && al_is_event_queue_empty(event_queue)) {
       //time to redraw the screen
- 		  redraw = false;
-      
+      redraw = false;
+      //Draw background 
+      track.draw(0, HEIGHT);
+      track.draw(WIDTH - 350, HEIGHT); 
+      //draw entities
       beat1.update();
       beat2.update();
- 		  //draw things
-      al_draw_line(0,HEIGHT-100, w-1, HEIGHT-100, al_map_rgb(255,255,255), 3);
       
- 		 //Display and reset buffer
- 		  al_flip_display();
+      //Display and reset buffer
+      al_flip_display();
       al_clear_to_color(al_map_rgb(0,0,0));
     }
   }
@@ -209,3 +214,5 @@ int main(int argc, char **argv)
   return 0;
 
 }
+
+
