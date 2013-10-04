@@ -1,3 +1,6 @@
+#ifndef RHYTHM_PLAYER_H
+#define RHYTHM_PLAYER_H
+
 class RhythmPlayer {
   public:
     RhythmPlayer();
@@ -10,3 +13,5 @@ class RhythmPlayer {
     int mana;
     int level;
 };
+
+#endif
