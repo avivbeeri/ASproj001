@@ -15,6 +15,7 @@
 #include "sprite.h"
 #include "track.h"
 #include "player.h"
+#include "beatmanager.h"
 
 //prototypes
 void drawTrack(int x);
@@ -70,6 +71,7 @@ int main(int argc, char **argv)
   //Resource initialisation
 
   RhythmPlayer player;
+  BeatManager manager;
 
   string str = "assets/art/arrow_blue.png";
   Sprite arrow(str);
@@ -87,6 +89,7 @@ int main(int argc, char **argv)
   beat2.setSprite(&arrow);
 
   //Initialise event handling
+  
   al_install_keyboard();
   event_queue = al_create_event_queue();
   if (event_queue == NULL) {
@@ -115,7 +118,7 @@ int main(int argc, char **argv)
     al_wait_for_event(event_queue, &ev);
     if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
- 
+      manager.tick();
       if (beat1.isLive()) 
         beat1.setY(beat1.getY() + 5);
       if (beat2.isLive())
@@ -202,6 +205,7 @@ int main(int argc, char **argv)
       //draw entities
       beat1.update();
       beat2.update();
+      manager.draw();
       
       //Display and reset buffer
       al_flip_display();

@@ -1,13 +1,16 @@
 all: game
 
-game:  main.o entity.o bitmap.o sprite.o player.o track.o
-	g++ main.o entity.o bitmap.o sprite.o player.o track.o -o game `pkg-config --libs allegro-5.0 allegro_primitives-5.0 allegro_image-5.0 allegro_font-5.0`
+game:  main.o entity.o bitmap.o sprite.o player.o track.o beatmanager.o
+	g++ main.o entity.o bitmap.o sprite.o player.o track.o  beatmanager.o -o game `pkg-config --libs allegro-5.0 allegro_primitives-5.0 allegro_image-5.0 allegro_font-5.0`
 
 main.o: main.cpp
 	g++ -c main.cpp
 
 bitmap.o: bitmap.cpp
 	g++ -c bitmap.cpp
+
+beatmanager.o: entity.o sprite.o beatmanager.cpp
+	g++ -c beatmanager.cpp
 
 entity.o: entity.cpp
 	g++ -c entity.cpp

@@ -53,3 +53,7 @@ void Entity::update() {
   sprite->draw(x,y);
 }
 
+void Entity::draw() {
+  sprite->draw(x,y);
+}
+

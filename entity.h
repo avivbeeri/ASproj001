@@ -17,6 +17,7 @@ class Entity
     bool isLive();
     void setSprite(Drawable * sprite);
     void update();
+    void draw();
   private:
     int x;
     int y;
