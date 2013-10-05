@@ -53,6 +53,6 @@ void BeatManager::update() {
   }
 }
 
-bool BeatManager::enemyAlive() {
+bool BeatManager::isGameOver() {
   return true;
 }

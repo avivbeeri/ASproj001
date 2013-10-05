@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 			if (!player.isAlive()) {
 				done = true;
 		  }
-			if (!manager.enemyAlive()) {
+			if (!manager.isGameOver()) {
         done = true;
 			}
 			redraw = true;
