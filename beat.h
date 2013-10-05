@@ -1,6 +1,8 @@
 #ifndef BEAT_H
 #define BEAT_H
 
+#include <allegro5/allegro.h>
+#include "globals.h"
 #include "entity.h"
 
 class Beat : public Entity {

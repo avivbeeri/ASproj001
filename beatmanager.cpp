@@ -3,7 +3,7 @@
 #include "entity.h"
 
 const int FPS = 60;
-const int offsetTest = 1024 - 350;
+const int offsetTest = 1024 - 365;
 
 BeatManager::BeatManager() {
   string s;

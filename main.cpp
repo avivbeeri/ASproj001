@@ -10,6 +10,7 @@
 #include <allegro5/allegro_font.h>
 
 //local files
+#include "globals.h"
 #include "entity.h"
 #include "bitmap.h"
 #include "sprite.h"
@@ -22,12 +23,7 @@ void drawTrack(int x);
 
 //declarations
 using std::string;
-enum KEY { UP, DOWN, LEFT, RIGHT , ESCAPE, KEY_A, KEY_S, KEY_D, KEY_F};
 
-//Globals
-const float FPS = 60;
-const int HEIGHT = 540;
-const int WIDTH = 1010;
 
 int main(int argc, char **argv)
 {
@@ -219,7 +215,8 @@ int main(int argc, char **argv)
       beat1.draw();
       beat2.draw();
       manager.draw();
-      
+      al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
+      al_draw_line(0, SLOT_BOTTOM, WIDTH, SLOT_BOTTOM, al_map_rgb(255,0,255), 4);      
       //Display and reset buffer
       al_flip_display();
       al_clear_to_color(al_map_rgb(0,0,0));
