@@ -1,4 +1,5 @@
-enum KEY { UP, DOWN, LEFT, RIGHT , ESCAPE, KEY_A, KEY_S, KEY_D, KEY_F};
+#include "globals.h"
+
 
 const float FPS = 60;
 const int HEIGHT = 540;
