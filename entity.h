@@ -16,11 +16,12 @@ class Entity
     int getY();
     bool isLive();
     void setSprite(Drawable * sprite);
-    void update();
+    virtual void update();
     void draw();
-  private:
+  protected:
     int x;
     int y;
+	private:
     bool live;
     Drawable * sprite;
 };
