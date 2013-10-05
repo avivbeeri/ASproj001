@@ -22,7 +22,7 @@ void drawTrack(int x);
 
 //declarations
 using std::string;
-enum key { UP, DOWN, LEFT, RIGHT , ESCAPE, KEY_A, KEY_S, KEY_D, KEY_F};
+enum KEY { UP, DOWN, LEFT, RIGHT , ESCAPE, KEY_A, KEY_S, KEY_D, KEY_F};
 
 //Globals
 const float FPS = 60;
