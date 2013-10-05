@@ -8,7 +8,7 @@ class Entity
   public:
     Entity();
     Entity(int x, int y);
-    ~Entity(); 
+    virtual ~Entity(); 
     void setLive(bool live);
     void setX(int x);
     void setY(int y);
