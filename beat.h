@@ -9,7 +9,7 @@ class Beat : public Entity {
 	  Beat(KEY type);
 	  ~Beat();
 		virtual void update();
-		bool keyPressEvent(ALLEGRO_EVENT e);
+		bool correctKey(ALLEGRO_EVENT e);
   private:
 	  KEY type; 
 	  
