@@ -52,3 +52,7 @@ void BeatManager::update() {
     time = 0; 
   }
 }
+
+bool BeatManager::enemyAlive() {
+  return true;
+}

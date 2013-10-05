@@ -123,7 +123,15 @@ int main(int argc, char **argv)
         beat1.setY(beat1.getY() + 5);
       if (beat2.isLive())
         beat2.setY(beat1.getY() + 5);
-      redraw = true;
+
+		  //Check the pass/fail conditions
+			if (!player.isAlive()) {
+				done = true;
+		  }
+			if (!manager.enemyAlive()) {
+        done = true;
+			}
+			redraw = true;
     }
     
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -157,7 +165,12 @@ int main(int argc, char **argv)
           break; 
       }
       //Process given button presses here
-      if (beat1.getY() >= HEIGHT - 100 && pressed[UP]) {
+      if (pressed[ESCAPE]) {
+			  //quit the game or return to the menu, when there is a menu
+        done = true; 
+			}
+			//Check if current beats are scored
+			if (beat1.getY() >= HEIGHT - 100 && pressed[UP]) {
         beat1.setLive(false);
       }
       if (beat2.getY() >= HEIGHT - 100 && pressed[LEFT]) {
@@ -166,16 +179,16 @@ int main(int argc, char **argv)
     } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
       switch(ev.keyboard.keycode) {
         case ALLEGRO_KEY_UP: 
-	  pressed[UP] = false;
+				  pressed[UP] = false;
           break; 
         case ALLEGRO_KEY_DOWN: 
- 	  pressed[DOWN] = false;
+				  pressed[DOWN] = false;
           break; 
         case ALLEGRO_KEY_LEFT: 
- 	  pressed[LEFT] = false;
+				  pressed[LEFT] = false;
           break; 
         case ALLEGRO_KEY_RIGHT: 
- 	  pressed[RIGHT] = false;
+				  pressed[RIGHT] = false;
           break; 
         case ALLEGRO_KEY_A: 
           pressed[KEY_A] = false;
@@ -203,8 +216,8 @@ int main(int argc, char **argv)
       track.draw(0, HEIGHT);
       track.draw(WIDTH - 350, HEIGHT); 
       //draw entities
-      beat1.update();
-      beat2.update();
+      beat1.draw();
+      beat2.draw();
       manager.draw();
       
       //Display and reset buffer

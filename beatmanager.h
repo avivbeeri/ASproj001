@@ -11,6 +11,7 @@ class BeatManager {
     void tick();
     void draw();
     void update();
+		bool enemyAlive();
   private:
     unsigned int time;
     int HEIGHT;
