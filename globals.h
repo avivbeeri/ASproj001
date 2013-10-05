@@ -7,6 +7,6 @@ extern const float FPS;
 extern const int HEIGHT;
 extern const int WIDTH;
 extern const int SLOT_TOP;
-extern const int SLOT_BUTTON;
+extern const int SLOT_BOTTOM;
 
 #endif

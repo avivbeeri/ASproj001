@@ -1,4 +1,5 @@
 #include "beat.h"
+#include "globals.h"
 
 Beat::Beat(KEY type):
   Entity()
@@ -17,6 +18,6 @@ void Beat::update() {
 bool Beat::correctKey(ALLEGRO_EVENT e) {
  //Returns true if the beat was hit correctly, 
  //otherwise return false. 
-  return (y - (HEIGHT - 200) < 50);
+  return (y > SLOT_TOP && y < SLOT_BOTTOM);
 
 }

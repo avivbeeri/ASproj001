@@ -10,13 +10,13 @@
 #include <allegro5/allegro_font.h>
 
 //local files
-#include "globals.h"
 #include "entity.h"
 #include "bitmap.h"
 #include "sprite.h"
 #include "track.h"
 #include "player.h"
 #include "beatmanager.h"
+#include "globals.h"
 
 //prototypes
 void drawTrack(int x);
