@@ -14,7 +14,7 @@ Beat::~Beat() {
 
 void Beat::update() {
 	y += 4;
-  if (y > SLOT_BOTTOM) {
+  if (y > HEIGHT) {
 		setLive(false);
     y = 0;
 	}
@@ -26,8 +26,9 @@ bool Beat::correctKey(ALLEGRO_EVENT ev) {
  //otherwise return false. 
 	if ((y > SLOT_TOP && y < SLOT_BOTTOM) &&
       (ev.type == ALLEGRO_EVENT_KEY_DOWN)) {
- 	  std::cout << "Testing correctKey" << std::endl;
+		
 		setLive(false);
+		y = 0;
 		switch(ev.keyboard.keycode) {
       case ALLEGRO_KEY_UP: 
         return type == UP;
@@ -57,5 +58,7 @@ bool Beat::correctKey(ALLEGRO_EVENT ev) {
 		  default:
 			  return false;	      
     }
-  }
+  } else {
+    //outside the box, you fail too!
+	}
 }
