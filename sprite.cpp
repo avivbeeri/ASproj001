@@ -1,7 +1,7 @@
 #include <allegro5/allegro.h>
 #include "sprite.h"
 	
-Sprite::Sprite(string str) {
+Sprite::Sprite(const string str) {
 	//file existence error checking
 	image = al_load_bitmap(str.c_str());
 	if (image == NULL) {

@@ -10,7 +10,7 @@ using std::string;
 class Sprite : public Drawable
 {
   public:
-    Sprite(string name);
+    Sprite(const string name);
     ~Sprite();
     virtual void draw(int x,  int y);
   private:
