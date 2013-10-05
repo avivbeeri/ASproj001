@@ -1,7 +1,10 @@
 #ifndef BEAT_MANAGER_H
 #define BEAT_MANAGER_H
 
+#include <allegro5/allegro.h>
 #include "sprite.h"
+#include "beat.h"
+
 
 class BeatManager {
 
@@ -12,7 +15,8 @@ class BeatManager {
     void draw();
     void update();
 		bool isGameOver();
-  private:
+    void interpretEvent(ALLEGRO_EVENT e);
+	private:
     unsigned int time;
     int HEIGHT;
     int WIDTH;
@@ -20,7 +24,7 @@ class BeatManager {
     Sprite * rightArrowSprite;
     Sprite * upArrowSprite;
     Sprite * downArrowSprite;
-   
+    Beat * test;
 };
 
 #endif

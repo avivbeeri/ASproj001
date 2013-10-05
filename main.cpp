@@ -1,7 +1,6 @@
 //Standard libs
 #include <stdio.h>
 #include <iostream>
-#include <string>
 
 //Allegro libs
 #include <allegro5/allegro.h>
@@ -20,10 +19,6 @@
 
 //prototypes
 void drawTrack(int x);
-
-//declarations
-using std::string;
-
 
 int main(int argc, char **argv)
 {
@@ -69,8 +64,7 @@ int main(int argc, char **argv)
   RhythmPlayer player;
   BeatManager manager;
 
-  string str = "assets/art/arrow_blue.png";
-  Sprite arrow(str);
+  Sprite arrow("assets/art/arrow_blue.png");
   Track track;
   /*
   ALLEGRO_BITMAP * image = al_create_bitmap(4, 4);
@@ -112,7 +106,8 @@ int main(int argc, char **argv)
   ALLEGRO_EVENT ev;
   while (!done) {
     al_wait_for_event(event_queue, &ev);
-    if (ev.type == ALLEGRO_EVENT_TIMER) {
+    manager.interpretEvent(ev);
+		if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
       manager.tick();
       if (beat1.isLive()) 
@@ -124,7 +119,7 @@ int main(int argc, char **argv)
 			if (!player.isAlive()) {
 				done = true;
 		  }
-			if (!manager.isGameOver()) {
+			if (manager.isGameOver()) {
         done = true;
 			}
 			redraw = true;

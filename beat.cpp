@@ -1,5 +1,6 @@
 #include "beat.h"
 #include "globals.h"
+#include <iostream>
 
 Beat::Beat(KEY type):
   Entity()
@@ -12,12 +13,49 @@ Beat::~Beat() {
 }
 
 void Beat::update() {
-  y += 1;
+	y += 4;
+  if (y > SLOT_BOTTOM) {
+		setLive(false);
+    y = 0;
+	}
+  
 }
 
-bool Beat::correctKey(ALLEGRO_EVENT e) {
+bool Beat::correctKey(ALLEGRO_EVENT ev) {
  //Returns true if the beat was hit correctly, 
  //otherwise return false. 
-  return (y > SLOT_TOP && y < SLOT_BOTTOM);
-
+	if ((y > SLOT_TOP && y < SLOT_BOTTOM) &&
+      (ev.type == ALLEGRO_EVENT_KEY_DOWN)) {
+ 	  std::cout << "Testing correctKey" << std::endl;
+		setLive(false);
+		switch(ev.keyboard.keycode) {
+      case ALLEGRO_KEY_UP: 
+        return type == UP;
+				break;
+      case ALLEGRO_KEY_DOWN: 
+        return type == DOWN;
+				break;
+      case ALLEGRO_KEY_LEFT:
+			  x += 100; 
+        return type == LEFT;
+				break;
+      case ALLEGRO_KEY_RIGHT: 
+        return type == RIGHT;
+				break;
+      case ALLEGRO_KEY_A: 
+        return type == KEY_A;
+				break;
+      case ALLEGRO_KEY_S: 
+        return type == KEY_S;
+				break;
+      case ALLEGRO_KEY_D: 
+        return type == KEY_D;
+				break;
+      case ALLEGRO_KEY_F: 
+        return type == KEY_F;
+				break;
+		  default:
+			  return false;	      
+    }
+  }
 }
