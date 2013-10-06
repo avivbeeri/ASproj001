@@ -6,6 +6,23 @@ Beat::Beat(KEY type):
   Entity()
 {
   this->type = type;  
+  switch(type) {
+    case UP: 
+		  setSprite(upArrowSprite);
+		  break;
+    case DOWN: 
+		  setSprite(downArrowSprite);
+		  break;
+    case RIGHT: 
+		  this->setSprite(rightArrowSprite);
+		  break;
+    case LEFT: 
+		  this->setSprite(leftArrowSprite);
+		  break;
+	  default:
+		  break;
+	}
+
 }
 
 Beat::~Beat() {
@@ -27,6 +44,7 @@ bool Beat::correctKey(ALLEGRO_EVENT ev) {
 	if ((y > SLOT_TOP && y < SLOT_BOTTOM) &&
       (ev.type == ALLEGRO_EVENT_KEY_DOWN)) {
 		
+    std::cout << "correctKey" <<std::endl;
 		setLive(false);
 		y = 0;
 		switch(ev.keyboard.keycode) {
@@ -58,6 +76,8 @@ bool Beat::correctKey(ALLEGRO_EVENT ev) {
 		  default:
 			  return false;	      
     }
+  } else if (ev.type != ALLEGRO_EVENT_KEY_DOWN) {  
+	  	
   } else {
     //outside the box, you fail too!
 	}

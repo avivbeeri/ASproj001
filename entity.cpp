@@ -49,6 +49,7 @@ void Entity::setSprite(Drawable * spritePtr) {
   sprite = spritePtr;
 }
 
+
 void Entity::update() {
   sprite->draw(x,y);
 }

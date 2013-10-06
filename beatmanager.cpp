@@ -1,38 +1,49 @@
 #include "beatmanager.h"
 #include "globals.h"
 #include "entity.h"
+#include <iostream>
+
 
 const int offsetTest = 1024 - 365;
 
 BeatManager::BeatManager() {
-  leftArrowSprite = new Sprite("assets/art/arrow_blue.png");
-  rightArrowSprite = new Sprite("assets/art/arrow_red.png");
-  upArrowSprite = new Sprite("assets/art/arrow_yellow.png");
-  downArrowSprite = new Sprite("assets/art/arrow_green.png");
-  test = new Beat(LEFT);
-	test->setSprite(leftArrowSprite);
 }
 
 
 BeatManager::~BeatManager() {
-  delete test;
-	delete leftArrowSprite;
-  delete rightArrowSprite;
-  delete upArrowSprite;
-  delete downArrowSprite;
+  while (!activeBeats.empty()) {
+    Beat * ptr = activeBeats.front();
+		activeBeats.pop_front();
+		delete ptr;
+  }
+	
 }
 
 void BeatManager::tick() {
   time++;
-	if (time == FPS) {
+	if (time >= FPS) {
 		update();
   }
-  //Add new beat to list
+  /*
+	  //Add new beat to list
 	if (test->isLive()) {
 	  test->update();
 	} else {
 		test->setLive(true); 
   }
+	*/
+	//update all beats
+	list<Beat*>::iterator beatIterator;
+
+	for (beatIterator = activeBeats.begin();
+		   beatIterator != activeBeats.end();
+			 beatIterator++)
+	{
+	
+		if ((*beatIterator)->isLive()) {
+     	(*beatIterator)->update();
+  	}
+	}
 }
 
 void BeatManager::draw() {
@@ -51,14 +62,25 @@ void BeatManager::draw() {
   Entity arrow4(267 + offsetTest,0);
   arrow4.setSprite(rightArrowSprite);
   arrow4.draw();
+  //iterate through all beats to draw them
+	list<Beat*>::iterator beatIterator;
 
-	if (test->isLive()) {
-    test->draw();
-  }
+	for (beatIterator = activeBeats.begin();
+		   beatIterator != activeBeats.end();
+			 beatIterator++)
+	{
+	
+		if ((*beatIterator)->isLive()) {
+     	(*beatIterator)->draw();
+  	}
+	}
 }
 
 void BeatManager::update() {
   time = 0; 
+  Beat * newBeat = new Beat(LEFT);
+	activeBeats.push_back(newBeat);
+
 }
 
 bool BeatManager::isGameOver() {
@@ -67,9 +89,19 @@ bool BeatManager::isGameOver() {
 
 void BeatManager::interpretEvent(ALLEGRO_EVENT e) {
   //pass event data to all active beats
-	if (!test->correctKey(e)) {
-	  	//player takes damage
-	} else {
+	if (activeBeats.empty()) {
+		return;
+  }
+	if (e.type == ALLEGRO_EVENT_KEY_DOWN) {
+	   
+		if (!((activeBeats.front())->correctKey(e))) {
+	    	//player takes damage
+      Beat * beats = activeBeats.front();
+	    activeBeats.pop_front();
+	    delete beats;
+	  } else {
 
-	}
+	  }
+    
+  }
 }

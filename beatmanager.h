@@ -1,9 +1,12 @@
 #ifndef BEAT_MANAGER_H
 #define BEAT_MANAGER_H
 
+#include <list>
 #include <allegro5/allegro.h>
 #include "sprite.h"
 #include "beat.h"
+
+using std::list;
 
 
 class BeatManager {
@@ -17,14 +20,10 @@ class BeatManager {
 		bool isGameOver();
     void interpretEvent(ALLEGRO_EVENT e);
 	private:
-    unsigned int time;
+    list<Beat *> activeBeats;
+		unsigned int time;
     int HEIGHT;
     int WIDTH;
-    Sprite * leftArrowSprite;
-    Sprite * rightArrowSprite;
-    Sprite * upArrowSprite;
-    Sprite * downArrowSprite;
-    Beat * test;
 };
 
 #endif

@@ -32,9 +32,6 @@ int main(int argc, char **argv)
   bool done = false;
   bool redraw = false;
 
-  Entity beat1(50, 0);
-  Entity beat2(100, 0);
-  
   if(!al_init()) {
      fprintf(stderr, "failed to initialize allegro!\n");
      return -1;
@@ -61,10 +58,13 @@ int main(int argc, char **argv)
 
   //Resource initialisation
 
+  leftArrowSprite = new Sprite("assets/art/arrow_blue.png");
+  rightArrowSprite = new Sprite("assets/art/arrow_red.png");
+  upArrowSprite = new Sprite("assets/art/arrow_yellow.png");
+  downArrowSprite = new Sprite("assets/art/arrow_green.png");
   RhythmPlayer player;
   BeatManager manager;
 
-  Sprite arrow("assets/art/arrow_blue.png");
   Track track;
   /*
   ALLEGRO_BITMAP * image = al_create_bitmap(4, 4);
@@ -75,9 +75,6 @@ int main(int argc, char **argv)
   
   Bitmap b(image);
   */
-  beat1.setSprite(&arrow);
-  beat2.setSprite(&arrow);
-
   //Initialise event handling
   
   al_install_keyboard();
@@ -110,11 +107,6 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
       manager.tick();
-      if (beat1.isLive()) 
-        beat1.setY(beat1.getY() + 5);
-      if (beat2.isLive())
-        beat2.setY(beat1.getY() + 5);
-
 		  //Check the pass/fail conditions
 			if (!player.isAlive()) {
 				done = true;
@@ -160,13 +152,6 @@ int main(int argc, char **argv)
 			  //quit the game or return to the menu, when there is a menu
         done = true; 
 			}
-			//Check if current beats are scored
-			if (beat1.getY() >= HEIGHT - 100 && pressed[UP]) {
-        beat1.setLive(false);
-      }
-      if (beat2.getY() >= HEIGHT - 100 && pressed[LEFT]) {
-        beat2.setLive(false);
-      }
     } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
       switch(ev.keyboard.keycode) {
         case ALLEGRO_KEY_UP: 
@@ -207,8 +192,6 @@ int main(int argc, char **argv)
       track.draw(0, HEIGHT);
       track.draw(WIDTH - 350, HEIGHT); 
       //draw entities
-      beat1.draw();
-      beat2.draw();
       manager.draw();
       al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
       al_draw_line(0, SLOT_BOTTOM, WIDTH, SLOT_BOTTOM, al_map_rgb(255,0,255), 4);      
@@ -217,6 +200,10 @@ int main(int argc, char **argv)
       al_clear_to_color(al_map_rgb(0,0,0));
     }
   }
+	delete leftArrowSprite;
+  delete rightArrowSprite;
+  delete upArrowSprite;
+  delete downArrowSprite;
   al_destroy_timer(timer);
   al_destroy_event_queue(event_queue);
   al_destroy_display(display);

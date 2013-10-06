@@ -14,7 +14,6 @@ class Beat : public Entity {
 		bool correctKey(ALLEGRO_EVENT e);
   private:
 	  KEY type; 
-	  
 };
 
 #endif
