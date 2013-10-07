@@ -5,9 +5,11 @@
 
 
 const int offsetTest = 1024 - 365;
+int directionTest = 0;
 
-BeatManager::BeatManager() {
-}
+BeatManager::BeatManager(RhythmPlayer &p):
+  player(p)
+{}
 
 
 BeatManager::~BeatManager() {
@@ -17,11 +19,6 @@ BeatManager::~BeatManager() {
 		delete ptr;
   }
 	
-  while (!missedBeats.empty()) {
-    Beat * ptr = missedBeats.front();
-		missedBeats.pop_front();
-		delete ptr;
-  }
 }
 
 void BeatManager::tick() {
@@ -42,6 +39,11 @@ void BeatManager::tick() {
      	(*beatIterator)->update();
   	} else {
       Beat * beats = activeBeats.front();
+		  if (beats->wasMissed()) {
+			  player.takeDamage(1);
+		  } else {
+			  player.heal(1);
+		  }
 			if (beatIterator != activeBeats.end()) {
 			  beatIterator++;
 			}
@@ -49,6 +51,16 @@ void BeatManager::tick() {
 	    delete beats;
 		}
 	}
+  while (!missedBeats.empty()) {
+    Beat * ptr = missedBeats.front();
+		if (ptr->wasMissed()) {
+			player.takeDamage(1);
+		} else {
+			player.heal(1);
+		}
+		missedBeats.pop_front();
+		delete ptr;
+  }
 }
 
 void BeatManager::draw() {
@@ -80,9 +92,11 @@ void BeatManager::draw() {
 
 void BeatManager::update() {
   time = 0; 
-  Beat * newBeat = new Beat(LEFT);
+	
+  Beat * newBeat = new Beat(static_cast<KEY>(directionTest));
+	newBeat->setX(100*directionTest++);
+	directionTest %= 4;
 	activeBeats.push_back(newBeat);
-
 }
 
 bool BeatManager::isGameOver() {
@@ -96,13 +110,20 @@ void BeatManager::interpretEvent(ALLEGRO_EVENT e) {
   }
 	if (e.type == ALLEGRO_EVENT_KEY_DOWN) {
 	   
-		if (!((activeBeats.front())->correctKey(e))) {
+		//was the key a game-relevant one? 
+		if (((activeBeats.front())->correctKey(e))) {
+		  std::cout << "Valid keypress" << std::endl;
+			if (activeBeats.front()->wasMissed()) {
+		    std::cout << "Missed, take damage" << std::endl;
 	    	//player takes damage
-      missedBeats.push_back(activeBeats.front());
-			activeBeats.pop_front();
-	  } else {
-
+        missedBeats.push_back(activeBeats.front());
+			  activeBeats.pop_front();
+			} else {
+      //award points for correct presses
+		  }
+		} else {
+      //was an invalid press, ignored for now.
 	  }
     
-  }
+  } //else timer event, ignored
 }

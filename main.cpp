@@ -7,6 +7,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
 //local files
 #include "entity.h"
@@ -55,15 +56,23 @@ int main(int argc, char **argv)
   al_init_primitives_addon();
   al_init_image_addon();
   al_init_font_addon();
+	al_init_ttf_addon();
+	 
 
   //Resource initialisation
+
+  ALLEGRO_FONT *font13 = al_load_ttf_font("assets/fonts/copyviol.ttf",13,0 );
+  if (!font13) {
+    fprintf(stderr, "Could not load 'copyviol.ttf'.\n");
+	  return -1;
+	}
 
   leftArrowSprite = new Sprite("assets/art/arrow_blue.png");
   rightArrowSprite = new Sprite("assets/art/arrow_red.png");
   upArrowSprite = new Sprite("assets/art/arrow_yellow.png");
   downArrowSprite = new Sprite("assets/art/arrow_green.png");
   RhythmPlayer player;
-  BeatManager manager;
+  BeatManager manager(player);
 
   Track track;
   /*
@@ -110,7 +119,8 @@ int main(int argc, char **argv)
 		  //Check the pass/fail conditions
 			if (!player.isAlive()) {
 				done = true;
-		  }
+		  } else {
+			}
 			if (manager.isGameOver()) {
         done = true;
 			}
@@ -191,7 +201,12 @@ int main(int argc, char **argv)
       //Draw background 
       track.draw(0, HEIGHT);
       track.draw(WIDTH - 350, HEIGHT); 
-      //draw entities
+      //draw UI
+      if (player.isAlive()) {
+			  al_draw_textf(font13, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
+			 }
+			//draw entities
+
       manager.draw();
       al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
       al_draw_line(0, SLOT_BOTTOM, WIDTH, SLOT_BOTTOM, al_map_rgb(255,0,255), 4);      

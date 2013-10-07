@@ -11,9 +11,11 @@ class Beat : public Entity {
 	  Beat(KEY type);
 	  ~Beat();
 		virtual void update();
+		bool wasMissed() { return missed; }
 		bool correctKey(ALLEGRO_EVENT e);
   private:
 	  KEY type; 
+		bool missed;
 };
 
 #endif

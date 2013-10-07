@@ -5,6 +5,7 @@
 #include <allegro5/allegro.h>
 #include "sprite.h"
 #include "beat.h"
+#include "player.h"
 
 using std::list;
 
@@ -12,7 +13,7 @@ using std::list;
 class BeatManager {
 
   public:
-    BeatManager();
+    BeatManager(RhythmPlayer &player);
     ~BeatManager();
     void tick();
     void draw();
@@ -25,6 +26,7 @@ class BeatManager {
 		unsigned int time;
     int HEIGHT;
     int WIDTH;
+		RhythmPlayer &player;
 };
 
 #endif
