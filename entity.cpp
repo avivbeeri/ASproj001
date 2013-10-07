@@ -55,6 +55,8 @@ void Entity::update() {
 }
 
 void Entity::draw() {
-  sprite->draw(x,y);
+  if (live) {
+	  sprite->draw(x,y);
+	}
 }
 
