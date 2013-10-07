@@ -61,8 +61,8 @@ int main(int argc, char **argv)
 
   //Resource initialisation
 
-  ALLEGRO_FONT *font13 = al_load_ttf_font("assets/fonts/copyviol.ttf",13,0 );
-  if (!font13) {
+  ALLEGRO_FONT *font16 = al_load_ttf_font("assets/fonts/copyviol.ttf",16,0 );
+  if (!font16) {
     fprintf(stderr, "Could not load 'copyviol.ttf'.\n");
 	  return -1;
 	}
@@ -203,7 +203,7 @@ int main(int argc, char **argv)
       track.draw(WIDTH - 350, HEIGHT); 
       //draw UI
       if (player.isAlive()) {
-			  al_draw_textf(font13, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
+			  al_draw_textf(font16, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
 			 }
 			//draw entities
 
