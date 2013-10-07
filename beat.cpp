@@ -77,7 +77,7 @@ bool Beat::correctKey(ALLEGRO_EVENT ev) {
 			  return false;	      
     }
   } else if (ev.type != ALLEGRO_EVENT_KEY_DOWN) {  
-	  	
+	  //timer event, do nothing for now	
   } else {
     //outside the box, you fail too!
 	}

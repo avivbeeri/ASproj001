@@ -21,6 +21,7 @@ class BeatManager {
     void interpretEvent(ALLEGRO_EVENT e);
 	private:
     list<Beat *> activeBeats;
+    list<Beat *> missedBeats;
 		unsigned int time;
     int HEIGHT;
     int WIDTH;

@@ -17,6 +17,11 @@ BeatManager::~BeatManager() {
 		delete ptr;
   }
 	
+  while (!missedBeats.empty()) {
+    Beat * ptr = missedBeats.front();
+		missedBeats.pop_front();
+		delete ptr;
+  }
 }
 
 void BeatManager::tick() {
@@ -93,13 +98,8 @@ void BeatManager::interpretEvent(ALLEGRO_EVENT e) {
 	   
 		if (!((activeBeats.front())->correctKey(e))) {
 	    	//player takes damage
-     /* Beat * beats = activeBeats.front();
-	    activeBeats.pop_front();
-			delete beats;
-			*/
-			if (!activeBeats.empty()) {
-			  activeBeats.front()->setX(100);
-			}
+      missedBeats.push_back(activeBeats.front());
+			activeBeats.pop_front();
 	  } else {
 
 	  }
