@@ -24,14 +24,7 @@ void BeatManager::tick() {
 	if (time >= FPS) {
 		update();
   }
-  /*
-	  //Add new beat to list
-	if (test->isLive()) {
-	  test->update();
-	} else {
-		test->setLive(true); 
-  }
-	*/
+	
 	//update all beats
 	list<Beat*>::iterator beatIterator;
 
@@ -42,7 +35,14 @@ void BeatManager::tick() {
 	
 		if ((*beatIterator)->isLive()) {
      	(*beatIterator)->update();
-  	}
+  	} else {
+      Beat * beats = activeBeats.front();
+			if (beatIterator != activeBeats.end()) {
+			  beatIterator++;
+			}
+	    activeBeats.pop_front();
+	    delete beats;
+		}
 	}
 }
 
@@ -69,10 +69,7 @@ void BeatManager::draw() {
 		   beatIterator != activeBeats.end();
 			 beatIterator++)
 	{
-	
-		if ((*beatIterator)->isLive()) {
-     	(*beatIterator)->draw();
-  	}
+   	(*beatIterator)->draw();
 	}
 }
 
@@ -96,9 +93,13 @@ void BeatManager::interpretEvent(ALLEGRO_EVENT e) {
 	   
 		if (!((activeBeats.front())->correctKey(e))) {
 	    	//player takes damage
-      Beat * beats = activeBeats.front();
+     /* Beat * beats = activeBeats.front();
 	    activeBeats.pop_front();
-	    delete beats;
+			delete beats;
+			*/
+			if (!activeBeats.empty()) {
+			  activeBeats.front()->setX(100);
+			}
 	  } else {
 
 	  }
