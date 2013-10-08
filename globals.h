@@ -2,7 +2,7 @@
 #define GLOBALS_H
 
 #include "sprite.h"
-enum KEY { UP, DOWN, LEFT, RIGHT , ESCAPE, KEY_A, KEY_S, KEY_D, KEY_F};
+enum KEY { UP, DOWN, LEFT, RIGHT , ESCAPE, KEY_A, KEY_S, KEY_D, KEY_F, SPACE};
 
 extern const float FPS;
 extern const int HEIGHT;

@@ -20,6 +20,7 @@
 
 //prototypes
 void drawTrack(int x);
+enum STATE {RUNNING, GAMEOVER};
 
 int main(int argc, char **argv)
 {
@@ -28,10 +29,11 @@ int main(int argc, char **argv)
   ALLEGRO_MONITOR_INFO info;
   ALLEGRO_TIMER *timer = NULL;
   
-  bool pressed[9] = {false, false, false, false, 
-		     false, false, false, false, false};
+  bool pressed[10] = {false, false, false, false, 
+		     false, false, false, false, false, false};
   bool done = false;
   bool redraw = false;
+  STATE state = RUNNING;
 
   if(!al_init()) {
      fprintf(stderr, "failed to initialize allegro!\n");
@@ -67,10 +69,10 @@ int main(int argc, char **argv)
 	  return -1;
 	}
 
-  leftArrowSprite = new Sprite("assets/art/arrow_blue.png");
-  rightArrowSprite = new Sprite("assets/art/arrow_red.png");
-  upArrowSprite = new Sprite("assets/art/arrow_yellow.png");
-  downArrowSprite = new Sprite("assets/art/arrow_green.png");
+  leftArrowSprite = new Sprite("assets/art/arrow_left.png");
+  rightArrowSprite = new Sprite("assets/art/arrow_right.png");
+  upArrowSprite = new Sprite("assets/art/arrow_up.png");
+  downArrowSprite = new Sprite("assets/art/arrow_down.png");
   RhythmPlayer player;
   BeatManager manager(player);
 
@@ -115,14 +117,14 @@ int main(int argc, char **argv)
     manager.interpretEvent(ev);
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
-      manager.tick();
-		  //Check the pass/fail conditions
-			if (!player.isAlive()) {
-				done = true;
-		  } else {
-			}
-			if (manager.isGameOver()) {
-        done = true;
+      if (state == RUNNING) {
+				manager.tick();
+				//Check the pass/fail conditions
+				if (!player.isAlive() || manager.isGameOver()) {
+					state = GAMEOVER;
+				}
+			} else if (state == GAMEOVER) {
+			  
 			}
 			redraw = true;
     }
@@ -156,11 +158,26 @@ int main(int argc, char **argv)
         case ALLEGRO_KEY_ESCAPE: 
           pressed[ESCAPE] = true;
           break; 
+        case ALLEGRO_KEY_SPACE: 
+          pressed[SPACE] = true;
+          break; 
       }
       //Process given button presses here
-      if (pressed[ESCAPE]) {
-			  //quit the game or return to the menu, when there is a menu
-        done = true; 
+      if (state == RUNNING) {
+
+				if (pressed[ESCAPE]) {
+					//quit the game or return to the menu, when there is a menu
+					state = GAMEOVER;
+				}
+			} else if (state == GAMEOVER) {
+        if (pressed[SPACE]) {
+				  player.reset();
+					state = RUNNING;	
+				}
+				if (pressed[ESCAPE]) {
+					//quit the game or return to the menu, when there is a menu
+					done = true; 
+				}
 			}
     } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
       switch(ev.keyboard.keycode) {
@@ -199,18 +216,22 @@ int main(int argc, char **argv)
       //time to redraw the screen
       redraw = false;
       //Draw background 
-      track.draw(0, HEIGHT);
-      track.draw(WIDTH - 350, HEIGHT); 
-      //draw UI
-      if (player.isAlive()) {
-			  al_draw_textf(font16, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
-			 }
-			//draw entities
+      if (state == RUNNING) {
+				track.draw(0, HEIGHT);
+				track.draw(WIDTH - 350, HEIGHT); 
+				//draw UI
+				if (player.isAlive()) {
+					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
+				 }
+				//draw entities
 
-      manager.draw();
-      al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
-      al_draw_line(0, SLOT_BOTTOM, WIDTH, SLOT_BOTTOM, al_map_rgb(255,0,255), 4);      
-      //Display and reset buffer
+				manager.draw();
+				al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
+				al_draw_line(0, SLOT_BOTTOM, WIDTH, SLOT_BOTTOM, al_map_rgb(255,0,255), 4);      
+      } else if (state == GAMEOVER) {
+					al_draw_text(font16, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2,ALLEGRO_ALIGN_CENTER, "GAME OVER!"); 
+			}
+			//Display and reset buffer
       al_flip_display();
       al_clear_to_color(al_map_rgb(0,0,0));
     }
