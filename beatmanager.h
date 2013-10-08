@@ -28,6 +28,7 @@ class BeatManager {
     int HEIGHT;
     int WIDTH;
 		RhythmPlayer &player;
+    int directionTest;
 };
 
 #endif

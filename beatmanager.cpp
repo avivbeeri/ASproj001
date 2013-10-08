@@ -7,9 +7,11 @@ const int offsetTest = WIDTH - 355;
 int directionTest = 0;
 
 BeatManager::BeatManager(RhythmPlayer &p, unsigned int oset):
-  player(p),
-	offset(oset)
-{}
+  player(p),	
+	offset(oset),
+  directionTest(0)
+{
+}
 
 
 BeatManager::~BeatManager() {
@@ -93,9 +95,9 @@ void BeatManager::draw() {
 void BeatManager::update() {
   time = 0; 
 	
-  Beat * newBeat = new Beat(static_cast<KEY>(directionTest));
-	newBeat->setX(offset + 70*directionTest++);
-	directionTest %= 4;
+  Beat * newBeat = new Beat(static_cast<KEY>(this->directionTest));
+	newBeat->setX(offset + 70*(this->directionTest)++);
+	this->directionTest %= 4;
 	activeBeats.push_back(newBeat);
 }
 
