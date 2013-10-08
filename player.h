@@ -9,6 +9,7 @@ class RhythmPlayer {
     void takeDamage(int dmg) { HP -= dmg; }
     void heal(int value) { HP += value; }
     unsigned int getHP(){ return HP; }
+	  void reset();
 	private:
     unsigned int HP;
     unsigned int mana;

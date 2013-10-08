@@ -9,3 +9,10 @@ RhythmPlayer::RhythmPlayer() {
 RhythmPlayer::~RhythmPlayer() {
   //Empty destructor
 }
+
+
+void RhythmPlayer::reset() {
+  HP = 100;
+  mana = 0;
+  level = 1;
+}
