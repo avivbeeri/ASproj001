@@ -42,9 +42,9 @@ void BeatManager::tick() {
   	} else {
       //Cleanup
 
-      Beat * beats = activeBeats.front();
+      Beat * oldBeat = *beatIterator;
 	    beatIterator = activeBeats.erase(beatIterator);
-	    missedBeats.push_front(beats);
+	    missedBeats.push_front(oldBeat);
       
 		}
 	}
@@ -97,6 +97,10 @@ void BeatManager::update() {
 	newBeat->setX(offset + 70*(this->directionTest)++);
 	this->directionTest %= 4;
 	activeBeats.push_back(newBeat);
+  newBeat = new Beat(static_cast<KEY>(this->directionTest));
+	newBeat->setX(offset + 70*(this->directionTest)++);
+	this->directionTest %= 4;
+	activeBeats.push_back(newBeat);
 }
 
 bool BeatManager::isGameOver() {
@@ -119,9 +123,9 @@ void BeatManager::onEvent(ALLEGRO_EVENT e) {
     if ((*beatIterator)->isLive()) {
       (*beatIterator)->onEvent(e);
     } else {
-      Beat * beats = activeBeats.front();
+      Beat * oldBeat = *beatIterator;
 	    beatIterator = activeBeats.erase(beatIterator);
-	    missedBeats.push_front(beats);
+	    missedBeats.push_front(oldBeat);
     }
   }
     
