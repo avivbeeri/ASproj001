@@ -19,15 +19,15 @@ class BeatManager {
     void draw();
     void update();
 		bool isGameOver();
-    void interpretEvent(ALLEGRO_EVENT e);
+    void onEvent(ALLEGRO_EVENT e);
 	private:
     list<Beat *> activeBeats;
     list<Beat *> missedBeats;
+		RhythmPlayer &player;
 		unsigned int offset;
 		unsigned int time;
     int HEIGHT;
     int WIDTH;
-		RhythmPlayer &player;
     int directionTest;
 };
 
