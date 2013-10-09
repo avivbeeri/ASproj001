@@ -21,8 +21,8 @@ Entity::~Entity() {
 }
 
 
-void Entity::setLive(bool live) {
-  this->live = live;
+void Entity::kill() {
+  this->live = false;
 }
 
 void Entity::setX(int x) {
@@ -50,9 +50,7 @@ void Entity::setSprite(Drawable * spritePtr) {
 }
 
 
-void Entity::update() {
-  sprite->draw(x,y);
-}
+void Entity::update() {}
 
 void Entity::draw() {
   if (live) {

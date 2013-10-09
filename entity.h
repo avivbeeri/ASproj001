@@ -9,7 +9,7 @@ class Entity
     Entity();
     Entity(int x, int y);
     virtual ~Entity(); 
-    void setLive(bool live);
+    void kill();
     void setX(int x);
     void setY(int y);
     int getX();
@@ -17,12 +17,12 @@ class Entity
     bool isLive();
     void setSprite(Drawable * sprite);
     virtual void update();
-    void draw();
+    virtual void draw();
   protected:
     int x;
     int y;
-	private:
     bool live;
+	private:
     Drawable * sprite;
 };
 
