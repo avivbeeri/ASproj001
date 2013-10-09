@@ -9,10 +9,9 @@ class Beat : public Entity {
 
   public:
 	  Beat(KEY type);
-	  ~Beat();
-		virtual void update();
+    virtual void update();
 		bool wasMissed() { return missed; }
-		bool correctKey(ALLEGRO_EVENT e);
+		void onEvent(ALLEGRO_EVENT e);
   private:
 	  KEY type; 
 		bool missed;
