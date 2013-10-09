@@ -119,8 +119,9 @@ void BeatManager::onEvent(ALLEGRO_EVENT e) {
     if ((*beatIterator)->isLive()) {
       (*beatIterator)->onEvent(e);
     } else {
-      missedBeats.push_back(activeBeats.front());
-      activeBeats.pop_front();
+      Beat * beats = activeBeats.front();
+	    beatIterator = activeBeats.erase(beatIterator);
+	    missedBeats.push_front(beats);
     }
   }
     
