@@ -7,7 +7,7 @@
 class Track : public Drawable {
   public:
     Track();
-    ~Track();
+    virtual ~Track();
     void draw(int x, int h);
   private:
     Sprite * track_sprite;
