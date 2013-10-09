@@ -52,6 +52,8 @@ void Entity::setSprite(Drawable * spritePtr) {
 
 void Entity::update() {}
 
+void Entity::onEvent(ALLEGRO_EVENT ev) {}
+
 void Entity::draw() {
   if (live) {
 	  sprite->draw(x,y);
