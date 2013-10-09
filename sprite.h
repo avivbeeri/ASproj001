@@ -11,7 +11,7 @@ class Sprite : public Drawable
 {
   public:
     Sprite(const string name);
-    ~Sprite();
+    virtual ~Sprite();
     virtual void draw(int x,  int y);
   private:
     ALLEGRO_BITMAP *image;
