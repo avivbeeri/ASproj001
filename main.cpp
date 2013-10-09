@@ -10,6 +10,7 @@
 #include <allegro5/allegro_ttf.h>
 
 //local files
+#include "inputmanager.h"
 #include "entity.h"
 #include "bitmap.h"
 #include "sprite.h"
@@ -26,11 +27,9 @@ int main(int argc, char **argv)
 {
   ALLEGRO_DISPLAY *display = NULL;
   ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-  ALLEGRO_MONITOR_INFO info;
+  //ALLEGRO_MONITOR_INFO info;
   ALLEGRO_TIMER *timer = NULL;
   
-  bool pressed[10] = {false, false, false, false, 
-		     false, false, false, false, false, false};
   bool done = false;
   bool redraw = false;
   STATE state = RUNNING;
@@ -90,6 +89,8 @@ int main(int argc, char **argv)
   //Initialise event handling
   
   al_install_keyboard();
+  inputManager = new InputManager();
+  
   event_queue = al_create_event_queue();
   if (event_queue == NULL) {
     fprintf(stderr, "failed to initialize event queue!\n");
@@ -116,6 +117,11 @@ int main(int argc, char **argv)
   ALLEGRO_EVENT ev;
   while (!done) {
     al_wait_for_event(event_queue, &ev);
+    //distribute events to event listeners?
+    inputManager->onEvent(ev);
+
+    //handle specific game event actions
+
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
       if (state == RUNNING) {
@@ -132,86 +138,26 @@ int main(int argc, char **argv)
     }
     
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
- 		  switch(ev.keyboard.keycode) {
-        case ALLEGRO_KEY_UP: 
-          pressed[UP] = true;
-          break; 
-        case ALLEGRO_KEY_DOWN: 
-          pressed[DOWN] = true;
-          break; 
-        case ALLEGRO_KEY_LEFT: 
-          pressed[LEFT] = true;
-          break; 
-        case ALLEGRO_KEY_RIGHT: 
-          pressed[RIGHT] = true;
-          break; 
-        case ALLEGRO_KEY_A: 
-          pressed[KEY_A] = true;
-          break; 
-        case ALLEGRO_KEY_S: 
-          pressed[KEY_S] = true;
-          break; 
-        case ALLEGRO_KEY_D: 
-          pressed[KEY_D] = true;
-          break; 
-        case ALLEGRO_KEY_F: 
-          pressed[KEY_F] = true;
-          break; 
-        case ALLEGRO_KEY_ESCAPE: 
-          pressed[ESCAPE] = true;
-          break; 
-        case ALLEGRO_KEY_SPACE: 
-          pressed[SPACE] = true;
-          break; 
-      }
       //Process given button presses here
       if (state == RUNNING) {
-        songManager.interpretEvent(ev);
-        spellManager.interpretEvent(ev);
-				if (pressed[ESCAPE]) {
+        songManager.onEvent(ev);
+        spellManager.onEvent(ev);
+				if (inputManager->isPressed(ESCAPE)) {
 					//quit the game or return to the menu, when there is a menu
 					state = GAMEOVER;
 				}
 			} else if (state == GAMEOVER) {
-        if (pressed[SPACE]) {
+        if (inputManager->isPressed(SPACE)) {
 				  player.reset();
 					state = RUNNING;	
 				}
-				if (pressed[ESCAPE]) {
+				if (inputManager->isPressed(ESCAPE)) {
 					//quit the game or return to the menu, when there is a menu
 					done = true; 
 				}
 			}
     } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
-      switch(ev.keyboard.keycode) {
-        case ALLEGRO_KEY_UP: 
-				  pressed[UP] = false;
-          break; 
-        case ALLEGRO_KEY_DOWN: 
-				  pressed[DOWN] = false;
-          break; 
-        case ALLEGRO_KEY_LEFT: 
-				  pressed[LEFT] = false;
-          break; 
-        case ALLEGRO_KEY_RIGHT: 
-				  pressed[RIGHT] = false;
-          break; 
-        case ALLEGRO_KEY_A: 
-          pressed[KEY_A] = false;
-          break; 
-        case ALLEGRO_KEY_S: 
-          pressed[KEY_S] = false;
-          break; 
-        case ALLEGRO_KEY_D: 
-          pressed[KEY_D] = false;
-          break; 
-        case ALLEGRO_KEY_F: 
-          pressed[KEY_F] = false;
-          break; 
-        case ALLEGRO_KEY_ESCAPE: 
-          pressed[ESCAPE] = false;
-          break; 
-      }
+      //stuff?
     } else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
       done = true;
     }
@@ -240,6 +186,7 @@ int main(int argc, char **argv)
       al_clear_to_color(al_map_rgb(0,0,0));
     }
   }
+  delete inputManager;
 	delete leftArrowSprite;
   delete rightArrowSprite;
   delete upArrowSprite;

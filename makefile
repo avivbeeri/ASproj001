@@ -1,34 +1,36 @@
+CXX = g++
+CXXFLAGS = -Wall -g
+ALLEGRO_LIBS = allegro-5.0 allegro_primitives-5.0 allegro_image-5.0 allegro_font-5.0 allegro_ttf-5.0
+
+.PHONY: clean
+
 all: game
 
-game:  globals.o main.o entity.o bitmap.o sprite.o player.o track.o beatmanager.o beat.o
-	g++ globals.o main.o beat.o entity.o bitmap.o sprite.o player.o track.o  beatmanager.o -g -o game `pkg-config --libs allegro-5.0 allegro_primitives-5.0 allegro_image-5.0 allegro_font-5.0 allegro_ttf-5.0`
+game: main.o
+	$(CXX) $(CXXFLAGS) `pkg-config --libs $(ALLEGRO_LIBS)` -o game main.o globals.o beat.o entity.o bitmap.o sprite.o player.o track.o beatmanager.o inputmanager.o 
 
-globals.o: globals.cpp
-	g++ -c globals.cpp
 
-main.o: main.cpp
-	g++ -c main.cpp
+main.o: main.cpp globals.o entity.o bitmap.o sprite.o player.o track.o beatmanager.o beat.o inputmanager.o
 
-bitmap.o: bitmap.cpp
-	g++ -c bitmap.cpp
+track.o: track.h sprite.h bitmap.h drawable.h
 
-beatmanager.o: player.o entity.o sprite.o beatmanager.cpp
-	g++ -c beatmanager.cpp
+beatmanager.o: beatmanager.h player.h entity.h sprite.h
 
-beat.o: entity.o beat.cpp
-	g++ -c beat.cpp -lentity.o
+beat.o: beat.h entity.h inputmanager.h
 
-entity.o: entity.cpp
-	g++ -c entity.cpp
-
-track.o: sprite.o track.cpp
-	g++ -c track.cpp
+entity.o: entity.h drawable.h
 	
-sprite.o: sprite.cpp
-	g++ -c sprite.cpp
+globals.o: globals.h inputmanager.h sprite.h 
 
-player.o: player.cpp
-	g++ -c player.cpp
+bitmap.o: bitmap.h drawable.h
+
+sprite.o: sprite.h
+
+player.o: player.h
+
+drawable.o: drawable.h
+
+inputmanager.o: inputmanager.h globals.h
 
 clean:
 	rm -rf *o game
