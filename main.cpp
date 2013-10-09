@@ -74,7 +74,8 @@ int main(int argc, char **argv)
   upArrowSprite = new Sprite("assets/art/arrow_up.png");
   downArrowSprite = new Sprite("assets/art/arrow_down.png");
   RhythmPlayer player;
-  BeatManager manager(player);
+  BeatManager songManager(player, 750);
+  BeatManager spellManager(player, 0);
 
   Track track;
   /*
@@ -94,7 +95,8 @@ int main(int argc, char **argv)
     fprintf(stderr, "failed to initialize event queue!\n");
     al_destroy_display(display);
     return -1;  
-  }  
+  }
+
 
   timer = al_create_timer(1.0 / FPS);
   if (timer == NULL) {
@@ -114,13 +116,13 @@ int main(int argc, char **argv)
   ALLEGRO_EVENT ev;
   while (!done) {
     al_wait_for_event(event_queue, &ev);
-    manager.interpretEvent(ev);
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
       if (state == RUNNING) {
-				manager.tick();
 				//Check the pass/fail conditions
-				if (!player.isAlive() || manager.isGameOver()) {
+				songManager.tick();
+				spellManager.tick();
+				if (!player.isAlive() || songManager.isGameOver()) {
 					state = GAMEOVER;
 				}
 			} else if (state == GAMEOVER) {
@@ -164,7 +166,8 @@ int main(int argc, char **argv)
       }
       //Process given button presses here
       if (state == RUNNING) {
-
+        songManager.interpretEvent(ev);
+        spellManager.interpretEvent(ev);
 				if (pressed[ESCAPE]) {
 					//quit the game or return to the menu, when there is a menu
 					state = GAMEOVER;
@@ -225,7 +228,8 @@ int main(int argc, char **argv)
 				 }
 				//draw entities
 
-				manager.draw();
+				songManager.draw();
+				spellManager.draw();
 				al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
 				al_draw_line(0, SLOT_BOTTOM, WIDTH, SLOT_BOTTOM, al_map_rgb(255,0,255), 4);      
       } else if (state == GAMEOVER) {
@@ -240,7 +244,8 @@ int main(int argc, char **argv)
   delete rightArrowSprite;
   delete upArrowSprite;
   delete downArrowSprite;
-  al_destroy_timer(timer);
+  al_destroy_font(font16);
+	al_destroy_timer(timer);
   al_destroy_event_queue(event_queue);
   al_destroy_display(display);
   return 0;

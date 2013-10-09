@@ -13,7 +13,7 @@ using std::list;
 class BeatManager {
 
   public:
-    BeatManager(RhythmPlayer &player);
+    BeatManager(RhythmPlayer &player, unsigned int offset);
     ~BeatManager();
     void tick();
     void draw();
@@ -23,10 +23,12 @@ class BeatManager {
 	private:
     list<Beat *> activeBeats;
     list<Beat *> missedBeats;
+		unsigned int offset;
 		unsigned int time;
     int HEIGHT;
     int WIDTH;
 		RhythmPlayer &player;
+    int directionTest;
 };
 
 #endif

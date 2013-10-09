@@ -6,12 +6,13 @@ class RhythmPlayer {
     RhythmPlayer();
     ~RhythmPlayer();
     bool isAlive() { return (HP != 0); }
-    void takeDamage(int dmg) { HP -= dmg; }
-    void heal(int value) { HP += value; }
-    unsigned int getHP(){ return HP; }
+    void takeDamage(int dmg);
+    void heal(int value);
+    unsigned int getHP() {return HP; }
 	  void reset();
 	private:
-    unsigned int HP;
+    unsigned int maxHP;
+		unsigned int HP;
     unsigned int mana;
     unsigned int level;
 };

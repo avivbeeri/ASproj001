@@ -1,15 +1,17 @@
 #include "beatmanager.h"
 #include "globals.h"
 #include "entity.h"
-#include <iostream>
 
 
-const int offsetTest = 1024 - 365;
+const int offsetTest = WIDTH - 355;
 int directionTest = 0;
 
-BeatManager::BeatManager(RhythmPlayer &p):
-  player(p)
-{}
+BeatManager::BeatManager(RhythmPlayer &p, unsigned int oset):
+  player(p),	
+	offset(oset),
+  directionTest(0)
+{
+}
 
 
 BeatManager::~BeatManager() {
@@ -93,9 +95,9 @@ void BeatManager::draw() {
 void BeatManager::update() {
   time = 0; 
 	
-  Beat * newBeat = new Beat(static_cast<KEY>(directionTest));
-	newBeat->setX(100*directionTest++);
-	directionTest %= 4;
+  Beat * newBeat = new Beat(static_cast<KEY>(this->directionTest));
+	newBeat->setX(offset + 70*(this->directionTest)++);
+	this->directionTest %= 4;
 	activeBeats.push_back(newBeat);
 }
 
@@ -112,9 +114,7 @@ void BeatManager::interpretEvent(ALLEGRO_EVENT e) {
 	   
 		//was the key a game-relevant one? 
 		if (((activeBeats.front())->correctKey(e))) {
-		  std::cout << "Valid keypress" << std::endl;
 			if (activeBeats.front()->wasMissed()) {
-		    std::cout << "Missed, take damage" << std::endl;
 	    	//player takes damage
         missedBeats.push_back(activeBeats.front());
 			  activeBeats.pop_front();

@@ -1,6 +1,5 @@
 #include "beat.h"
 #include "globals.h"
-#include <iostream>
 
 Beat::Beat(KEY type):
   Entity()
