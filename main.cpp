@@ -127,7 +127,7 @@ int main(int argc, char **argv)
       if (state == RUNNING) {
 				//Check the pass/fail conditions
 				songManager.tick();
-				spellManager.tick();
+				//spellManager.tick();
 				if (!player.isAlive() || songManager.isGameOver()) {
 					state = GAMEOVER;
 				}
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
       //Process given button presses here
       if (state == RUNNING) {
         songManager.onEvent(ev);
-        spellManager.onEvent(ev);
+        //spellManager.onEvent(ev);
 				if (inputManager->isPressed(ESCAPE)) {
 					//quit the game or return to the menu, when there is a menu
 					state = GAMEOVER;
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 				//draw entities
 
 				songManager.draw();
-				spellManager.draw();
+				//spellManager.draw();
 				al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
 				al_draw_line(0, SLOT_BOTTOM, WIDTH, SLOT_BOTTOM, al_map_rgb(255,0,255), 4);      
       } else if (state == GAMEOVER) {
