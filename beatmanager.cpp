@@ -20,6 +20,11 @@ BeatManager::~BeatManager() {
 		activeBeats.pop_front();
 		delete ptr;
   }
+  while (!missedBeats.empty()) {
+    Beat * ptr = missedBeats.front();
+		missedBeats.pop_front();
+		delete ptr;
+  }
 	
 }
 

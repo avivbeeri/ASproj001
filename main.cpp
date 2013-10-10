@@ -127,6 +127,11 @@ int main(int argc, char **argv)
   ALLEGRO_EVENT ev;
   while (!done) {
     al_wait_for_event(event_queue, &ev);
+    
+    if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+      music.stop();
+      done = true;
+    }
     //distribute events to event listeners?
     inputManager->onEvent(ev);
 
@@ -147,9 +152,7 @@ int main(int argc, char **argv)
 			  
 			}
 			redraw = true;
-    }
-    
-    if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+    } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
       //Process given button presses here
       if (state == RUNNING) {
 				if (inputManager->isPressed(ESCAPE)) {
@@ -170,8 +173,6 @@ int main(int argc, char **argv)
 			}
     } else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
       //stuff?
-    } else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-      done = true;
     }
  	  if (redraw && al_is_event_queue_empty(event_queue)) {
       //time to redraw the screen
@@ -183,6 +184,8 @@ int main(int argc, char **argv)
 				//draw UI
 				if (player.isAlive()) {
 					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
+    			al_draw_textf(font16, al_map_rgb(255,255,255), 400, 40, 0, "Song length: %u", music.getLength());
+
 				 }
 				//draw entities
 
@@ -198,11 +201,14 @@ int main(int argc, char **argv)
       al_clear_to_color(al_map_rgb(0,0,0));
     }
   }
+  
   delete inputManager;
 	delete leftArrowSprite;
   delete rightArrowSprite;
   delete upArrowSprite;
   delete downArrowSprite;
+  
+  
   al_destroy_font(font16);
 	al_destroy_timer(timer);
   al_destroy_event_queue(event_queue);
