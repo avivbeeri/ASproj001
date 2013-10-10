@@ -52,7 +52,9 @@ void Entity::setSprite(Drawable * spritePtr) {
 
 void Entity::update() {}
 
-void Entity::onEvent(ALLEGRO_EVENT ev) {}
+bool Entity::onEvent(ALLEGRO_EVENT ev) {
+  return false;  
+}
 
 void Entity::draw() {
   if (live) {

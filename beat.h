@@ -12,7 +12,7 @@ class Beat : public Entity {
 	  Beat(KEY type);
     virtual void update();
 		bool wasMissed() { return missed; }
-		void onEvent(ALLEGRO_EVENT e);
+		bool onEvent(ALLEGRO_EVENT e);
   private:
 	  KEY type; 
 		bool missed;

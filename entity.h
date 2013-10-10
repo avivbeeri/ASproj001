@@ -17,7 +17,7 @@ class Entity
     int getY();
     bool isLive();
     void setSprite(Drawable * sprite);
-    virtual void onEvent(ALLEGRO_EVENT ev);
+    virtual bool onEvent(ALLEGRO_EVENT ev);
     virtual void update();
     virtual void draw();
   protected:

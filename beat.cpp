@@ -33,7 +33,7 @@ void Beat::update() {
   
 }
 
-void Beat::onEvent(ALLEGRO_EVENT ev) {
+bool Beat::onEvent(ALLEGRO_EVENT ev) {
 	//this->missed is set to true if the press was incorrect 
   //due to earlyness, lateness or incorrect button.
 	 
@@ -47,8 +47,10 @@ void Beat::onEvent(ALLEGRO_EVENT ev) {
       if (inputManager->isPressed(type)) {
         missed = false; 
         kill();
+        return true;
       }
     } else if (ev.type == ALLEGRO_EVENT_TIMER) {
 			this->update();
     }
+    return false;
 }
