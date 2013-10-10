@@ -14,10 +14,9 @@ main.o: main.cpp sound.o globals.o entity.o bitmap.o sprite.o player.o track.o b
 
 track.o: track.h sprite.h bitmap.h drawable.h
 
-beatmanager.o: beatmanager.h player.h entity.h sprite.h
+beatmanager.o: beatmanager.h beat.h player.h entity.h sprite.h
 
 beat.o: beat.h entity.h inputmanager.h
-
 	
 globals.o: globals.h inputmanager.h sprite.h 
 

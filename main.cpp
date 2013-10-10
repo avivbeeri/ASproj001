@@ -130,6 +130,8 @@ int main(int argc, char **argv)
     //distribute events to event listeners?
     inputManager->onEvent(ev);
 
+    songManager.onEvent(ev);
+    //spellManager.onEvent(ev);
     //handle specific game event actions
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
@@ -150,15 +152,15 @@ int main(int argc, char **argv)
     if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
       //Process given button presses here
       if (state == RUNNING) {
-        songManager.onEvent(ev);
-        //spellManager.onEvent(ev);
 				if (inputManager->isPressed(ESCAPE)) {
 					//quit the game or return to the menu, when there is a menu
 					state = GAMEOVER;
+					music.stop();
 				}
 			} else if (state == GAMEOVER) {
         if (inputManager->isPressed(SPACE)) {
 				  player.reset();
+					music.play();
 					state = RUNNING;	
 				}
 				if (inputManager->isPressed(ESCAPE)) {

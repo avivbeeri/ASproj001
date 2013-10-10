@@ -25,11 +25,11 @@ BeatManager::~BeatManager() {
 
 void BeatManager::tick() {
   time++;
-	if (time >= FPS) {
+	if (time >= 2 * FPS) {
 		update();
   }
 	
-	//update all beats
+	//cleanup all beats
 	list<Beat*>::iterator beatIterator;
 
 	for (beatIterator = activeBeats.begin();
@@ -37,10 +37,7 @@ void BeatManager::tick() {
 			 beatIterator++)
 	{
 	
-		if ((*beatIterator)->isLive()) {
-     	(*beatIterator)->update();
-  	} else {
-      //Cleanup
+		if (!(*beatIterator)->isLive()) {
 
       Beat * oldBeat = *beatIterator;
 	    beatIterator = activeBeats.erase(beatIterator);
@@ -112,14 +109,13 @@ void BeatManager::onEvent(ALLEGRO_EVENT e) {
 	if (activeBeats.empty()) {
 		return;
   }
-	   
   list<Beat*>::iterator beatIterator;
 
   for (beatIterator = activeBeats.begin();
        beatIterator != activeBeats.end();
        beatIterator++)
   {
-  
+     
     if ((*beatIterator)->isLive()) {
       (*beatIterator)->onEvent(e);
     } else {

@@ -48,5 +48,7 @@ void Beat::onEvent(ALLEGRO_EVENT ev) {
         missed = false; 
         kill();
       }
+    } else if (ev.type == ALLEGRO_EVENT_TIMER) {
+			this->update();
     }
 }
