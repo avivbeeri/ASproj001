@@ -13,6 +13,14 @@ Sound::~Sound() {
   al_destroy_sample(sample);
 }
 
-void Sound::play(ALLEGRO_PLAYMODE mode) {
-  al_play_sample(sample, 1.0, 0.0, 1.0, mode, NULL);
+bool Sound::play(ALLEGRO_PLAYMODE mode) {
+  playing = al_play_sample(sample, 1.0, 0.0, 1.0, mode, id);
+	return playing;
+}
+
+void Sound::stop() {
+  if (playing) {
+    al_stop_sample(id);
+		playing = false;
+	}
 }

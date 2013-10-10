@@ -11,9 +11,12 @@ class Sound {
   public:
     Sound(const string filename);
 		~Sound();
-		void play(ALLEGRO_PLAYMODE mode = ALLEGRO_PLAYMODE_ONCE);
+		bool play(ALLEGRO_PLAYMODE mode = ALLEGRO_PLAYMODE_ONCE);
+	  void stop();
 	private:
+	  bool playing;
     ALLEGRO_SAMPLE *sample;
+    ALLEGRO_SAMPLE_ID id;
 };
 
 #endif
