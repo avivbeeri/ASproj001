@@ -8,16 +8,21 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 
 //local files
+#include "globals.h"
 #include "inputmanager.h"
-#include "entity.h"
+#include "player.h"
+
+#include "sound.h"
 #include "bitmap.h"
 #include "sprite.h"
 #include "track.h"
-#include "player.h"
+#include "entity.h"
+
 #include "beatmanager.h"
-#include "globals.h"
 
 //prototypes
 void drawTrack(int x);
@@ -58,10 +63,15 @@ int main(int argc, char **argv)
   al_init_image_addon();
   al_init_font_addon();
 	al_init_ttf_addon();
-	 
+	
+	al_install_audio(); 
 
-  //Resource initialisation
-
+  al_init_acodec_addon(); 
+	//Resource initialisation
+  al_reserve_samples(1); 
+	
+	Sound music("assets/music/loz.wav");
+	music.play();
   ALLEGRO_FONT *font16 = al_load_ttf_font("assets/fonts/copyviol.ttf",16,0 );
   if (!font16) {
     fprintf(stderr, "Could not load 'copyviol.ttf'.\n");
