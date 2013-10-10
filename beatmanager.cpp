@@ -25,7 +25,7 @@ BeatManager::~BeatManager() {
 
 void BeatManager::tick() {
   time++;
-	if (time >= 0.5 * FPS) {
+	if (time >= 2 * FPS) {
 		update();
   }
 	
@@ -91,7 +91,7 @@ void BeatManager::update() {
   time = 0; 
 	
   Beat * newBeat = new Beat(static_cast<KEY>(this->directionTest));
-	newBeat->setX(offset + 70*(this->directionTest)++);
+	newBeat->setX(offset + 70*(this->directionTest++));
 	this->directionTest %= 4;
 	activeBeats.push_back(newBeat);
   newBeat = new Beat(static_cast<KEY>(this->directionTest));
@@ -109,20 +109,21 @@ void BeatManager::onEvent(ALLEGRO_EVENT e) {
 	if (activeBeats.empty()) {
 		return;
   }
-  list<Beat*>::iterator beatIterator;
+  list<Beat*>::iterator beatIterator = activeBeats.begin();
+  bool eventConsumed = false;
 
-  for (beatIterator = activeBeats.begin();
-       beatIterator != activeBeats.end();
-       beatIterator++)
-  {
-     
+
+  while (beatIterator != activeBeats.end() && 
+          eventConsumed == false) {
+ 
     if ((*beatIterator)->isLive()) {
-      (*beatIterator)->onEvent(e);
+      eventConsumed = (*beatIterator)->onEvent(e);
     } else {
       Beat * oldBeat = *beatIterator;
 	    beatIterator = activeBeats.erase(beatIterator);
 	    missedBeats.push_front(oldBeat);
     }
+    beatIterator++;
   }
     
 }
