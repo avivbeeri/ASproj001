@@ -24,3 +24,8 @@ void Sound::stop() {
 		playing = false;
 	}
 }
+
+unsigned int Sound::getLength() {
+  return (al_get_sample_length(sample)  / al_get_sample_frequency(sample));
+//  return 1;
+}
