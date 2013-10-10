@@ -18,7 +18,6 @@ beatmanager.o: beatmanager.h player.h entity.h sprite.h
 
 beat.o: beat.h entity.h inputmanager.h
 
-entity.o: entity.h drawable.h
 	
 globals.o: globals.h inputmanager.h sprite.h 
 
@@ -27,6 +26,8 @@ bitmap.o: bitmap.h drawable.h
 sprite.o: sprite.h
 
 player.o: player.h
+
+entity.o: entity.h drawable.h
 
 drawable.o: drawable.h
 
