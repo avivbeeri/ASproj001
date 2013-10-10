@@ -4,6 +4,7 @@
 #include <allegro5/allegro.h>
 #include "globals.h"
 #include "entity.h"
+#include "inputmanager.h"
 
 class Beat : public Entity {
 

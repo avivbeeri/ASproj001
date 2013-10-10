@@ -25,7 +25,7 @@ BeatManager::~BeatManager() {
 
 void BeatManager::tick() {
   time++;
-	if (time >= 2 * FPS) {
+	if (time >= 0.5 * FPS) {
 		update();
   }
 	
