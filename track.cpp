@@ -6,7 +6,7 @@ using std::string;
 
 Track::Track() {
   track_sprite = new Sprite("assets/art/track.png");
-  trackend_sprite = new Sprite("assets/art/track.png");
+  trackend_sprite = new Sprite("assets/art/track_end.png");
 }
 
 Track::~Track() {
