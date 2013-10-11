@@ -159,7 +159,6 @@ int main(int argc, char **argv)
       if (state == RUNNING) {
 				//Check the pass/fail conditions
 				songManager.tick();
-				//spellManager.tick();
 				if (!player.isAlive() || songManager.isGameOver()) {
 					state = GAMEOVER;
 				}
@@ -208,6 +207,7 @@ int main(int argc, char **argv)
 				//draw UI
 				if (player.isAlive()) {
 					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
+					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 80,0, "Time remaining: %u", level.getTimeRemaining()); 
     			al_draw_textf(font16, al_map_rgb(255,255,255), 400, 40, 0, "Song length: %u", music.getLength());
 
 				 }
