@@ -18,6 +18,11 @@ void RhythmLevel::begin() {
   song->play();
 }
 
+void RhythmLevel::end() {
+  song->stop();
+  reset();
+}
+
 void RhythmLevel::tick() {
   ticks++;
   if (ticks >= FPS) {

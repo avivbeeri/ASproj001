@@ -12,6 +12,7 @@ class RhythmLevel {
     void reset();
     void onEvent(ALLEGRO_EVENT ev);
     void begin();
+    void end();
     Beat * getNextBeat();
     bool levelComplete();
     unsigned int getTimeRemaining() { return songLength - songPosition; }
