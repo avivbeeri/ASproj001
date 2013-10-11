@@ -14,7 +14,8 @@ class RhythmLevel {
     void begin();
     Beat * getNextBeat();
     bool levelComplete();
-  private: 
+    unsigned int getTimeRemaining() { return songLength - songPosition; }
+	private: 
     void tick();
     
     Sound * song;
