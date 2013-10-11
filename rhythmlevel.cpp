@@ -18,9 +18,18 @@ void RhythmLevel::begin() {
   song->play();
 }
 
+void RhythmLevel::tick() {
+  ticks++;
+  if (ticks >= FPS) {
+    songPosition++;
+    ticks = 0;
+  }
+}
+
 void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
   if (ev.type == ALLEGRO_EVENT_TIMER) {
-    songPosition++;
+    tick();
+
     if (songPosition == (songLength / 2)) {
       song->play();
     }

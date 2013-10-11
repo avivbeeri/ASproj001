@@ -4,6 +4,7 @@
 #include <allegro5/allegro.h>
 #include "beat.h"
 #include "sound.h"
+#include "globals.h"
 
 class RhythmLevel {
   public:
@@ -14,7 +15,10 @@ class RhythmLevel {
     Beat * getNextBeat();
     bool levelComplete();
   private: 
+    void tick();
+    
     Sound * song;
+    unsigned int ticks;
     unsigned int songLength;
     unsigned int songPosition;
     unsigned short enemyHP;
