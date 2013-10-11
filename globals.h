@@ -1,7 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-enum KEY { UP, DOWN, LEFT, RIGHT, KEY_A, KEY_S, KEY_D, KEY_F, SPACE, ESCAPE};
+enum KEY { UP, DOWN, LEFT, RIGHT, KEY_A, KEY_S, KEY_D, KEY_F, SPACE, ESCAPE, EMPTY};
 
 
 #include "inputmanager.h"
