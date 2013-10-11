@@ -9,6 +9,16 @@ RhythmLevel::RhythmLevel():
   songLength = song->getLength() * 2;
 }
 
+RhythmLevel::RhythmLevel(const string levelName):
+  songPosition(0),
+  enemyHP(15)
+  
+{
+  wavFile = "assets/music/loz.wav";
+  song = new Sound(wavFile);
+  songLength = song->getLength() * 2;
+}
+
 void RhythmLevel::reset() {
   songPosition = 0;
   enemyHP = 15;
