@@ -4,15 +4,15 @@
 #include <allegro5/allegro.h>
 #include "globals.h"
 #include "entity.h"
+#include "inputmanager.h"
 
 class Beat : public Entity {
 
   public:
 	  Beat(KEY type);
-	  ~Beat();
-		virtual void update();
+    virtual void update();
 		bool wasMissed() { return missed; }
-		bool correctKey(ALLEGRO_EVENT e);
+		bool onEvent(ALLEGRO_EVENT e);
   private:
 	  KEY type; 
 		bool missed;

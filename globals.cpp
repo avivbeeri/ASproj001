@@ -12,3 +12,5 @@ Sprite * leftArrowSprite;
 Sprite * rightArrowSprite;
 Sprite * upArrowSprite;
 Sprite * downArrowSprite;
+
+InputManager * inputManager;

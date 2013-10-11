@@ -1,16 +1,16 @@
 #include "beatmanager.h"
 #include "globals.h"
 #include "entity.h"
-
+#include <iostream>
 
 const int offsetTest = WIDTH - 355;
-int directionTest = 0;
 
 BeatManager::BeatManager(RhythmPlayer &p, unsigned int oset):
   player(p),	
-	offset(oset),
-  directionTest(0)
+	offset(oset)
 {
+
+  level = NULL;
 }
 
 
@@ -20,16 +20,27 @@ BeatManager::~BeatManager() {
 		activeBeats.pop_front();
 		delete ptr;
   }
+  while (!missedBeats.empty()) {
+    std::cout << "clearing the missedBeats" << std::endl;
+		Beat * ptr = missedBeats.front();
+		missedBeats.pop_front();
+		delete ptr;
+  }
 	
+}
+
+void BeatManager::playLevel(RhythmLevel * l) {
+  level = l;
+  level->begin();
 }
 
 void BeatManager::tick() {
   time++;
-	if (time >= FPS) {
+	if (time >= 0.5 * FPS) {
 		update();
   }
 	
-	//update all beats
+	//cleanup all beats
 	list<Beat*>::iterator beatIterator;
 
 	for (beatIterator = activeBeats.begin();
@@ -37,20 +48,12 @@ void BeatManager::tick() {
 			 beatIterator++)
 	{
 	
-		if ((*beatIterator)->isLive()) {
-     	(*beatIterator)->update();
-  	} else {
-      Beat * beats = activeBeats.front();
-		  if (beats->wasMissed()) {
-			  player.takeDamage(1);
-		  } else {
-			  player.heal(1);
-		  }
-			if (beatIterator != activeBeats.end()) {
-			  beatIterator++;
-			}
-	    activeBeats.pop_front();
-	    delete beats;
+		if (!(*beatIterator)->isLive()) {
+
+      Beat * oldBeat = *beatIterator;
+	    beatIterator = activeBeats.erase(beatIterator);
+	    missedBeats.push_front(oldBeat);
+      
 		}
 	}
   while (!missedBeats.empty()) {
@@ -68,6 +71,7 @@ void BeatManager::tick() {
 void BeatManager::draw() {
   //run through the list of beats, display them. they should know where they are.
   
+  /* Drawing co-ordinate tests
   Entity arrow1(13 +offsetTest,0);
   arrow1.setSprite(leftArrowSprite);
   arrow1.draw();
@@ -81,6 +85,8 @@ void BeatManager::draw() {
   Entity arrow4(267 + offsetTest,0);
   arrow4.setSprite(rightArrowSprite);
   arrow4.draw();
+  */
+  
   //iterate through all beats to draw them
 	list<Beat*>::iterator beatIterator;
 
@@ -94,36 +100,55 @@ void BeatManager::draw() {
 
 void BeatManager::update() {
   time = 0; 
+  Beat * newBeat;
+  if (level != NULL) {
+    newBeat = level->getNextBeat();
+    if (newBeat != NULL) {
+      activeBeats.push_back(newBeat);
+    }
+  }
 	
-  Beat * newBeat = new Beat(static_cast<KEY>(this->directionTest));
+  /* 
+	newBeat = new Beat(static_cast<KEY>(this->directionTest));
+	newBeat->setX(offset + 70*(this->directionTest++));
+	this->directionTest %= 4;
+	activeBeats.push_back(newBeat);
+  newBeat = new Beat(static_cast<KEY>(this->directionTest));
 	newBeat->setX(offset + 70*(this->directionTest)++);
 	this->directionTest %= 4;
 	activeBeats.push_back(newBeat);
+	*/
 }
 
 bool BeatManager::isGameOver() {
-  return false;
+  return !player.isAlive() || (level != NULL && level->levelComplete());
 }
 
-void BeatManager::interpretEvent(ALLEGRO_EVENT e) {
+void BeatManager::onEvent(ALLEGRO_EVENT e) {
+  //update the level - might not need to be in here, but in the main loop
+	if (level != NULL) {
+    level->onEvent(e);
+  }
+
   //pass event data to all active beats
 	if (activeBeats.empty()) {
 		return;
   }
-	if (e.type == ALLEGRO_EVENT_KEY_DOWN) {
-	   
-		//was the key a game-relevant one? 
-		if (((activeBeats.front())->correctKey(e))) {
-			if (activeBeats.front()->wasMissed()) {
-	    	//player takes damage
-        missedBeats.push_back(activeBeats.front());
-			  activeBeats.pop_front();
-			} else {
-      //award points for correct presses
-		  }
-		} else {
-      //was an invalid press, ignored for now.
-	  }
+  list<Beat*>::iterator beatIterator = activeBeats.begin();
+  bool eventConsumed = false;
+
+
+  while (beatIterator != activeBeats.end() && 
+          eventConsumed == false) {
+ 
+    if ((*beatIterator)->isLive()) {
+      eventConsumed = (*beatIterator)->onEvent(e);
+    } else {
+      Beat * oldBeat = *beatIterator;
+	    beatIterator = activeBeats.erase(beatIterator);
+	    missedBeats.push_front(oldBeat);
+    }
+    beatIterator++;
+  }
     
-  } //else timer event, ignored
 }

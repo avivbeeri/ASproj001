@@ -1,6 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include <allegro5/allegro.h>
 #include "drawable.h"
 
 class Entity
@@ -9,20 +10,21 @@ class Entity
     Entity();
     Entity(int x, int y);
     virtual ~Entity(); 
-    void setLive(bool live);
+    void kill();
     void setX(int x);
     void setY(int y);
     int getX();
     int getY();
     bool isLive();
     void setSprite(Drawable * sprite);
+    virtual bool onEvent(ALLEGRO_EVENT ev);
     virtual void update();
-    void draw();
+    virtual void draw();
   protected:
     int x;
     int y;
-	private:
     bool live;
+	private:
     Drawable * sprite;
 };
 
