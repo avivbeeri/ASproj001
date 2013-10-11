@@ -1,15 +1,13 @@
 #include "beatmanager.h"
 #include "globals.h"
 #include "entity.h"
-
+#include <iostream>
 
 const int offsetTest = WIDTH - 355;
-int directionTest = 0;
 
 BeatManager::BeatManager(RhythmPlayer &p, unsigned int oset):
   player(p),	
-	offset(oset),
-  directionTest(0)
+	offset(oset)
 {
 
   level = NULL;
@@ -23,7 +21,8 @@ BeatManager::~BeatManager() {
 		delete ptr;
   }
   while (!missedBeats.empty()) {
-    Beat * ptr = missedBeats.front();
+    std::cout << "clearing the missedBeats" << std::endl;
+		Beat * ptr = missedBeats.front();
 		missedBeats.pop_front();
 		delete ptr;
   }
@@ -37,7 +36,7 @@ void BeatManager::playLevel(RhythmLevel * l) {
 
 void BeatManager::tick() {
   time++;
-	if (time >= 2 * FPS) {
+	if (time >= 0.5 * FPS) {
 		update();
   }
 	
@@ -109,7 +108,8 @@ void BeatManager::update() {
     }
   }
 	
-  newBeat = new Beat(static_cast<KEY>(this->directionTest));
+  /* 
+	newBeat = new Beat(static_cast<KEY>(this->directionTest));
 	newBeat->setX(offset + 70*(this->directionTest++));
 	this->directionTest %= 4;
 	activeBeats.push_back(newBeat);
@@ -117,6 +117,7 @@ void BeatManager::update() {
 	newBeat->setX(offset + 70*(this->directionTest)++);
 	this->directionTest %= 4;
 	activeBeats.push_back(newBeat);
+	*/
 }
 
 bool BeatManager::isGameOver() {
@@ -124,11 +125,12 @@ bool BeatManager::isGameOver() {
 }
 
 void BeatManager::onEvent(ALLEGRO_EVENT e) {
-  //pass event data to all active beats
-  if (level != NULL) {
+  //update the level - might not need to be in here, but in the main loop
+	if (level != NULL) {
     level->onEvent(e);
   }
 
+  //pass event data to all active beats
 	if (activeBeats.empty()) {
 		return;
   }
