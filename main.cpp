@@ -71,7 +71,10 @@ int main(int argc, char **argv)
   al_reserve_samples(1); 
 	
 	Sound music("assets/music/loz.wav");
-	music.play();
+	//music.play();
+
+  RhythmLevel level;
+
   ALLEGRO_FONT *font16 = al_load_ttf_font("assets/fonts/copyviol.ttf",16,0 );
   if (!font16) {
     fprintf(stderr, "Could not load 'copyviol.ttf'.\n");
@@ -85,6 +88,7 @@ int main(int argc, char **argv)
   RhythmPlayer player;
   BeatManager songManager(player, 750);
   BeatManager spellManager(player, 0);
+
 
   Track track;
   /*
@@ -123,13 +127,14 @@ int main(int argc, char **argv)
   al_register_event_source(event_queue, al_get_timer_event_source(timer));
   
   //begin game loop timer
+  songManager.playLevel(&level);
   al_start_timer(timer);  
   ALLEGRO_EVENT ev;
   while (!done) {
     al_wait_for_event(event_queue, &ev);
     
     if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-      music.stop();
+      //music.stop();
       done = true;
     }
     //distribute events to event listeners?

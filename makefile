@@ -21,7 +21,7 @@ bitmap.o: bitmap.h drawable.h
 
 sprite.o: sprite.h drawable.h
 
-rhythmlevel.o: rhythmlevel.h beat.h sound.h
+rhythmlevel.o: rhythmlevel.h globals.h beat.h sound.h
 
 beat.o: beat.h entity.h inputmanager.h
 
