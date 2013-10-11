@@ -38,6 +38,9 @@ int main(int argc, char **argv)
   bool done = false;
   bool redraw = false;
   STATE state = RUNNING;
+  
+
+	//begin allegro
 
   if(!al_init()) {
      fprintf(stderr, "failed to initialize allegro!\n");
@@ -130,7 +133,14 @@ int main(int argc, char **argv)
   songManager.playLevel(&level);
   al_start_timer(timer);  
   ALLEGRO_EVENT ev;
-  while (!done) {
+  
+
+  //timing variables
+  double old_time = al_get_time();
+	int frames_done = 0;
+  double currentFPS = 0;
+
+	while (!done) {
     al_wait_for_event(event_queue, &ev);
     
     if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -157,6 +167,15 @@ int main(int argc, char **argv)
 			  
 			}
 			redraw = true;
+
+      double game_time = al_get_time();
+		  if(game_time - old_time >= 1.0) {
+		    currentFPS = frames_done / (game_time - old_time);
+		 
+			  frames_done = 0;
+			  old_time = game_time;
+		  }
+			frames_done++;
     } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
       //Process given button presses here
       if (state == RUNNING) {
@@ -201,10 +220,11 @@ int main(int argc, char **argv)
       } else if (state == GAMEOVER) {
 					al_draw_text(font16, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2,ALLEGRO_ALIGN_CENTER, "GAME OVER!"); 
 			}
+			al_draw_textf(font16, al_map_rgb(255,0,255), 0, 0, ALLEGRO_ALIGN_LEFT, "FPS: %f", currentFPS); 
 			//Display and reset buffer
       al_flip_display();
       al_clear_to_color(al_map_rgb(0,0,0));
-    }
+		}
   }
   
   delete inputManager;
