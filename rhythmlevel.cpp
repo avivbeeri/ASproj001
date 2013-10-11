@@ -37,7 +37,16 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
 }
 
 Beat * RhythmLevel::getNextBeat() {
-  return new Beat(LEFT);
+  switch (songPosition % 4) {
+    case 0: return new Beat(LEFT);
+		case 1: return new Beat(UP);
+		case 2: return new Beat(DOWN);
+		case 3: return new Beat(RIGHT);
+	  default: return NULL;
+	}
+
+	
+	
 }
 
 bool RhythmLevel::levelComplete() {
