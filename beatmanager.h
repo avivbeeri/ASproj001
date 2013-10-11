@@ -6,6 +6,7 @@
 #include "sprite.h"
 #include "beat.h"
 #include "player.h"
+#include "rhythmlevel.h"
 
 using std::list;
 
@@ -18,17 +19,19 @@ class BeatManager {
     void tick();
     void draw();
     void update();
-		bool isGameOver();
+		void playLevel(RhythmLevel * level);
+    bool isGameOver();
     void onEvent(ALLEGRO_EVENT e);
 	private:
     list<Beat *> activeBeats;
     list<Beat *> missedBeats;
 		RhythmPlayer &player;
-		unsigned int offset;
+    unsigned int offset;
 		unsigned int time;
     int HEIGHT;
     int WIDTH;
     int directionTest;
+		RhythmLevel * level;
 };
 
 #endif

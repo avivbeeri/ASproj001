@@ -11,6 +11,8 @@ BeatManager::BeatManager(RhythmPlayer &p, unsigned int oset):
 	offset(oset),
   directionTest(0)
 {
+
+  level = NULL;
 }
 
 
@@ -26,6 +28,11 @@ BeatManager::~BeatManager() {
 		delete ptr;
   }
 	
+}
+
+void BeatManager::playLevel(RhythmLevel * l) {
+  level = l;
+  level->begin();
 }
 
 void BeatManager::tick() {
@@ -94,8 +101,15 @@ void BeatManager::draw() {
 
 void BeatManager::update() {
   time = 0; 
+  Beat * newBeat;
+  if (level != NULL) {
+    newBeat = level->getNextBeat();
+    if (newBeat != NULL) {
+      activeBeats.push_back(newBeat);
+    }
+  }
 	
-  Beat * newBeat = new Beat(static_cast<KEY>(this->directionTest));
+  newBeat = new Beat(static_cast<KEY>(this->directionTest));
 	newBeat->setX(offset + 70*(this->directionTest++));
 	this->directionTest %= 4;
 	activeBeats.push_back(newBeat);
@@ -106,11 +120,15 @@ void BeatManager::update() {
 }
 
 bool BeatManager::isGameOver() {
-  return false;
+  return !player.isAlive() || (level != NULL && level->levelComplete());
 }
 
 void BeatManager::onEvent(ALLEGRO_EVENT e) {
   //pass event data to all active beats
+  if (level != NULL) {
+    level->onEvent(e);
+  }
+
 	if (activeBeats.empty()) {
 		return;
   }
