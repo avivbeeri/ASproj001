@@ -73,8 +73,6 @@ int main(int argc, char **argv)
 	//Resource initialisation
   al_reserve_samples(1); 
 	
-	Sound music("assets/music/loz.wav");
-	//music.play();
 
   RhythmLevel level;
 
@@ -144,7 +142,6 @@ int main(int argc, char **argv)
     al_wait_for_event(event_queue, &ev);
     
     if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-      //music.stop();
       done = true;
     }
     //distribute events to event listeners?
@@ -161,7 +158,8 @@ int main(int argc, char **argv)
 				songManager.tick();
 				if (!player.isAlive() || songManager.isGameOver()) {
 					state = GAMEOVER;
-				}
+				  level.end();
+        }
 			} else if (state == GAMEOVER) {
 			  
 			}
@@ -181,12 +179,12 @@ int main(int argc, char **argv)
 				if (inputManager->isPressed(ESCAPE)) {
 					//quit the game or return to the menu, when there is a menu
 					state = GAMEOVER;
-					music.stop();
+          level.end();
 				}
 			} else if (state == GAMEOVER) {
         if (inputManager->isPressed(SPACE)) {
 				  player.reset();
-					music.play();
+          songManager.playLevel(&level);
 					state = RUNNING;	
 				}
 				if (inputManager->isPressed(ESCAPE)) {
@@ -208,7 +206,6 @@ int main(int argc, char **argv)
 				if (player.isAlive()) {
 					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
 					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 80,0, "Time remaining: %u", level.getTimeRemaining()); 
-    			al_draw_textf(font16, al_map_rgb(255,255,255), 400, 40, 0, "Song length: %u", music.getLength());
 
 				 }
 				//draw entities
