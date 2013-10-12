@@ -15,8 +15,14 @@ RhythmLevel::RhythmLevel(const string levelName):
   
 {
   wavFile = "assets/music/loz.wav";
+  loadFile(levelName);
   song = new Sound(wavFile);
   songLength = song->getLength() * 2;
+}
+
+RhythmLevel::~RhythmLevel() {
+  song->stop();
+  delete song;
 }
 
 void RhythmLevel::reset() {
@@ -26,6 +32,20 @@ void RhythmLevel::reset() {
 
 void RhythmLevel::begin() {
   song->play();
+}
+
+void RhythmLevel::loadFile(const string levelFileName) {
+  ifstream levelFile (levelFileName.c_str(), ios::in);
+  if (!levelFile.is_open()) {
+     //error
+  }
+  
+  string currentLine;
+  while ( getline(levelFile, currentLine) ) {
+    //parse strings
+    std::cout << currentLine << std::endl;
+  } 
+  levelFile.close();
 }
 
 void RhythmLevel::tick() {

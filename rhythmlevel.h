@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 #include <allegro5/allegro.h>
 
 #include "beat.h"
@@ -12,20 +14,25 @@
 
 using std::string;
 using std::vector;
+using std::ifstream;
+using std::ios;
+using std::getline;
 
 class RhythmLevel {
   public:
     RhythmLevel();
     RhythmLevel(const string levelFile);
+    ~RhythmLevel();
     void reset();
     void onEvent(ALLEGRO_EVENT ev);
     void begin();
     Beat * getNextBeat();
     bool levelComplete();
     unsigned int getTimeRemaining() { return songLength - songPosition; }
-	private: 
+  private: 
     void tick();
-    
+    void loadFile(const string levelFile);
+
     Sound * song;
     unsigned int ticks;
     unsigned int songLength;
@@ -40,7 +47,7 @@ class RhythmLevel {
     string wavFile;
 
     //game data
-    vector<Tuple> data;
+    //vector<Tuple> data;
     
 };
 
