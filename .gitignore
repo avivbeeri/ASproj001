@@ -1,0 +1,23 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Compiled Header files
+*.h.gch
+*.h.swp
+
+# Final Compiled Game
+game
+
+#Misc temp files
+*.ods#
