@@ -74,7 +74,7 @@ int main(int argc, char **argv)
   al_reserve_samples(1); 
 	
 
-  RhythmLevel level;
+  RhythmLevel level("test.bms");
 
   ALLEGRO_FONT *font16 = al_load_ttf_font("assets/fonts/copyviol.ttf",16,0 );
   if (!font16) {

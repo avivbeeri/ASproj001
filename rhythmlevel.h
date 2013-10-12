@@ -2,6 +2,7 @@
 #define RHYTHMLEVEL_H
 
 #include <string>
+#include <algorithm>
 #include <vector>
 #include <iostream>
 #include <fstream>

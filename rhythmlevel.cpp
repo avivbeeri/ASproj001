@@ -43,7 +43,15 @@ void RhythmLevel::loadFile(const string levelFileName) {
   string currentLine;
   while ( getline(levelFile, currentLine) ) {
     //parse strings
+    if (currentLine.at(0) != '#') {
+      continue;
+    }
+    //a potential command, process
     std::cout << currentLine << std::endl;
+    int pivot = currentLine.find(' ', 2);
+    string parameter = currentLine.substr(1, pivot-1);
+    std::transform(parameter.begin(), parameter.end(),parameter.begin(), ::toupper);
+    std::cout << parameter << std::endl;
   } 
   levelFile.close();
 }
