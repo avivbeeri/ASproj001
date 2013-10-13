@@ -50,8 +50,9 @@ void RhythmLevel::loadFile(const string levelFileName) {
     std::cout << currentLine << std::endl;
     int pivot = currentLine.find(' ', 2);
     string parameter = currentLine.substr(1, pivot-1);
+    string value = currentLine.substr(pivot+1, currentLine.size());
     std::transform(parameter.begin(), parameter.end(),parameter.begin(), ::toupper);
-    std::cout << parameter << std::endl;
+    std::cout << parameter << " - " << value << std::endl;
   } 
   levelFile.close();
 }
