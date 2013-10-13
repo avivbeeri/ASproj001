@@ -10,19 +10,18 @@ RhythmLevel::RhythmLevel():
 }
 
 RhythmLevel::RhythmLevel(const string levelName):
+  song(NULL),
   songPosition(0),
   enemyHP(15)
-  
 {
-  wavFile = "assets/music/loz.wav";
   loadFile(levelName);
-  song = new Sound(wavFile);
-  songLength = song->getLength() * 2;
 }
 
 RhythmLevel::~RhythmLevel() {
-  song->stop();
-  delete song;
+  if (song != NULL) {
+	  song->stop();
+    delete song;
+	}
 }
 
 void RhythmLevel::reset() {
@@ -31,7 +30,9 @@ void RhythmLevel::reset() {
 }
 
 void RhythmLevel::begin() {
-  song->play();
+  if (song != NULL) {
+	  song->play();
+  }
 }
 
 void RhythmLevel::loadFile(const string levelFileName) {
@@ -47,18 +48,35 @@ void RhythmLevel::loadFile(const string levelFileName) {
       continue;
     }
     //a potential command, process
-    std::cout << currentLine << std::endl;
+    //std::cout << currentLine << std::endl;
     int pivot = currentLine.find(' ', 2);
     string parameter = currentLine.substr(1, pivot-1);
     string value = currentLine.substr(pivot+1, currentLine.size());
     std::transform(parameter.begin(), parameter.end(),parameter.begin(), ::toupper);
-    std::cout << parameter << " - " << value << std::endl;
-  } 
+    if (parameter == "TITLE") {
+      songName = value;  
+		} else if (parameter == "ARTIST") {
+      artistName = value;
+		} else if (parameter == "BPM") {
+		  bpm = atoi(value.c_str());	
+		} else if (parameter == "WAVFILE") {
+      wavFile = value;
+      song = new Sound(wavFile);
+      songLength = song->getLength() * 2;
+		}
+    		
+	} 
   levelFile.close();
+  
+  std::cout << "TITLE" << " - " << songName << std::endl;
+  std::cout << "ARTIST" << " - " << artistName << std::endl;
+  std::cout << "BPM" << " - " << bpm << std::endl;
 }
 
 void RhythmLevel::end() {
-  song->stop();
+  if (song != NULL) {
+	  song->stop();
+	}
   reset();
 }
 
