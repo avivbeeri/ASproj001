@@ -44,14 +44,23 @@ void RhythmLevel::loadFile(const string levelFileName) {
   string currentLine;
   while ( getline(levelFile, currentLine) ) {
     //parse strings
-    if (currentLine.at(0) != '#') {
+    std::cout << currentLine << std::endl;
+    if (currentLine.size() <= 0) {
+      continue;
+		}
+		if (currentLine.at(0) != '#') {
       continue;
     }
+    std::cout << "TEST" << std::endl;
     //a potential command, process
-    //std::cout << currentLine << std::endl;
-    int pivot = currentLine.find(' ', 2);
+    unsigned int pivot = currentLine.find(' ', 2);
+		std::cout << pivot << " -- " << currentLine<< std::endl;
+    if (pivot == string::npos) {
+      continue;
+		}
     string parameter = currentLine.substr(1, pivot-1);
-    string value = currentLine.substr(pivot+1, currentLine.size());
+    
+		string value = currentLine.substr(pivot+1, currentLine.size());
     std::transform(parameter.begin(), parameter.end(),parameter.begin(), ::toupper);
     if (parameter == "TITLE") {
       songName = value;  
