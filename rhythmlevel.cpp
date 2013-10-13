@@ -44,17 +44,15 @@ void RhythmLevel::loadFile(const string levelFileName) {
   string currentLine;
   while ( getline(levelFile, currentLine) ) {
     //parse strings
-    std::cout << currentLine << std::endl;
+    //std::cout << currentLine << std::endl;
     if (currentLine.size() <= 0) {
       continue;
 		}
 		if (currentLine.at(0) != '#') {
       continue;
     }
-    std::cout << "TEST" << std::endl;
     //a potential command, process
     unsigned int pivot = currentLine.find(' ', 2);
-		std::cout << pivot << " -- " << currentLine<< std::endl;
     if (pivot == string::npos) {
       continue;
 		}
@@ -68,6 +66,11 @@ void RhythmLevel::loadFile(const string levelFileName) {
       artistName = value;
 		} else if (parameter == "BPM") {
 		  bpm = atoi(value.c_str());	
+		} else if (parameter == "MEASURE") {
+      pivot = value.find('/', 1);
+			float dividend = atof(value.substr(0, pivot).c_str());
+			int  divisor = atoi(value.substr(pivot+1, value.size()).c_str());
+      measure = dividend / divisor;
 		} else if (parameter == "WAVFILE") {
       wavFile = value;
       song = new Sound(wavFile);
@@ -80,6 +83,7 @@ void RhythmLevel::loadFile(const string levelFileName) {
   std::cout << "TITLE" << " - " << songName << std::endl;
   std::cout << "ARTIST" << " - " << artistName << std::endl;
   std::cout << "BPM" << " - " << bpm << std::endl;
+  std::cout << "MEASURE" << " - " << measure << std::endl;
 }
 
 void RhythmLevel::end() {

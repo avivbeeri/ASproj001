@@ -47,6 +47,7 @@ class RhythmLevel {
     string artistName;
     unsigned int bpm;
     string wavFile;
+    double measure;
 
     //game data
     //vector<Tuple> data;
