@@ -31,7 +31,7 @@ void RhythmLevel::reset() {
 
 void RhythmLevel::begin() {
   if (song != NULL) {
-	  song->play();
+	  song->play(ALLEGRO_PLAYMODE_LOOP);
   }
 }
 
@@ -107,10 +107,11 @@ void RhythmLevel::tick() {
 void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
   if (ev.type == ALLEGRO_EVENT_TIMER) {
     tick();
-
-    if (songPosition == (songLength / 2)) {
-      song->play();
+    
+    if (songPosition >= songLength) {
+      song->stop();
     }
+    
   }
 }
 

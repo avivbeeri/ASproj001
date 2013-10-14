@@ -14,6 +14,7 @@ class Sound {
 		bool play(ALLEGRO_PLAYMODE mode = ALLEGRO_PLAYMODE_ONCE);
 	  void stop();
 	  unsigned int getLength();
+    bool isPlaying() { return playing; }
   private:
 	  bool playing;
     ALLEGRO_SAMPLE *sample;
