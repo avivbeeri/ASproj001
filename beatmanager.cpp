@@ -17,12 +17,26 @@ BeatManager::~BeatManager() {
 }
 
 void BeatManager::emitTuple(Tuple t) {
+  std::cout  << "BEATMANAGER.emitTuple" << std::endl;
   for (int i = 0; i < 4; i++) {
 		if (t.getElement(i) != EMPTY) {
 	    t.output();
-		  activeBeats.push_back(new Beat(t.getElement(i)));
+      Beat * newBeat = new Beat(t.getElement(i));
+		  activeBeats.push_back(newBeat);
 		}
   }
+}
+
+
+void BeatManager::update() {
+  list<Beat*>::iterator beatIterator;
+	for (beatIterator = activeBeats.begin();
+		   beatIterator != activeBeats.end();
+			 beatIterator++)
+	{
+      std::cout  << "BEATMANAGER.update" << std::endl;
+      (*beatIterator)->update();
+	}
 }
 
 void BeatManager::onEvent(ALLEGRO_EVENT e) {
@@ -30,17 +44,20 @@ void BeatManager::onEvent(ALLEGRO_EVENT e) {
 
 
   //pass event data to all active beats
+  if (activeBeats.empty()) {
+      return;
+  }
   list<Beat*>::iterator beatIterator = activeBeats.begin();
   bool eventConsumed = false;
 
-  while (beatIterator != activeBeats.end() && 
-          eventConsumed == false) {
   
+  do { 
     if ((*beatIterator)->isLive()) {
+      std::cout  << "BEATMANAGER.sendEvents" << std::endl;
       eventConsumed = (*beatIterator)->onEvent(e);
     } else {
-      
-     std::cout  << "BEATMANAGER.culling missed beats" << std::endl;
+       
+      std::cout  << "BEATMANAGER.culling missed beats" << std::endl;
       Beat * oldBeat = *beatIterator;
       beatIterator = activeBeats.erase(beatIterator);
       if (oldBeat->wasMissed()) {
@@ -49,10 +66,11 @@ void BeatManager::onEvent(ALLEGRO_EVENT e) {
         player.heal(1);
       }
       delete oldBeat;
+      
     }
     beatIterator++;
-  }
-  
+  } while (beatIterator != activeBeats.end() && 
+          eventConsumed == false); 
 }
 
 void BeatManager::draw() {

@@ -147,13 +147,17 @@ int main(int argc, char **argv)
     //distribute events to event listeners?
     inputManager->onEvent(ev);
 
-    level.onEvent(ev);
-    songManager.onEvent(ev);
+    if (state == RUNNING) {
+      songManager.onEvent(ev);
+      level.onEvent(ev);
+    }
     //handle specific game event actions
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
       if (state == RUNNING) {
+        songManager.update();
+
 				//Check the pass/fail conditions
 				if (!player.isAlive() || level.levelComplete()) {
 					state = GAMEOVER;

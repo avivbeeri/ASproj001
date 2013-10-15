@@ -27,10 +27,6 @@ RhythmLevel::~RhythmLevel() {
 
 void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
   if (ev.type == ALLEGRO_EVENT_TIMER) {
-    if (!playing) 
-    {
-      return;
-    }
 
     ticks++;
     barTicks++;
@@ -39,7 +35,8 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
       songPosition++;
       ticks = 0;
     }
-   
+    manager->update(); 
+    manager->draw(); 
      
     if (tupleIterator == data.end()) {
       tupleIterator = data.begin();
