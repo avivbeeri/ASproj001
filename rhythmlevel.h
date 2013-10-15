@@ -37,6 +37,7 @@ class RhythmLevel {
 
     Sound * song;
     unsigned int ticks;
+		unsigned int barTicks;
     unsigned int songLength;
     unsigned int songPosition;
     unsigned short enemyHP;
@@ -49,10 +50,11 @@ class RhythmLevel {
     string wavFile;
     double signature;
     unsigned int resolution;
+    double timePerBeat;
 
     //game data
     vector<Tuple> data;
-    
+    std::vector<Tuple>::iterator tupleIterator;    
 };
 
 #endif

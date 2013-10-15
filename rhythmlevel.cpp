@@ -2,19 +2,24 @@
 
 RhythmLevel::RhythmLevel():
   songPosition(0),
+  ticks(0),
+	barTicks(0), 
   enemyHP(15)
-  
 {
   song = new Sound("assets/music/loz.wav");
   songLength = song->getLength() * 2;
+  tupleIterator = data.begin();
 }
 
 RhythmLevel::RhythmLevel(const string levelName):
   song(NULL),
+  ticks(0),
+	barTicks(0),  
   songPosition(0),
   enemyHP(15)
 {
   loadFile(levelName);
+  tupleIterator = data.begin();
 }
 
 RhythmLevel::~RhythmLevel() {
@@ -66,6 +71,7 @@ void RhythmLevel::loadFile(const string levelFileName) {
       artistName = value;
 		} else if (parameter == "BPM") {
 		  bpm = atoi(value.c_str());	
+		  timePerBeat = 1 / (double) bpm;
 		} else if (parameter == "RESOLUTION") {
 		  resolution = atoi(value.c_str());	
 		} else if (parameter == "BARS") {
@@ -84,14 +90,18 @@ void RhythmLevel::loadFile(const string levelFileName) {
 	} 
   levelFile.close();
   
-  std::cout << "TITLE" << " - " << songName << std::endl;
+  data.resize(barCount * resolution, Tuple(EMPTY, EMPTY, EMPTY, EMPTY));
+  
+	//Data output test
+	std::cout << "TITLE" << " - " << songName << std::endl;
   std::cout << "ARTIST" << " - " << artistName << std::endl;
   std::cout << "BPM" << " - " << bpm << std::endl;
   std::cout << "RESOLUTION" << " - " << resolution << std::endl;
   std::cout << "BARS" << " - " << barCount << std::endl;
   std::cout << "SIGNATURE" << " - " << signature << std::endl;
-  data.resize(barCount * resolution, Tuple(EMPTY, EMPTY, EMPTY, EMPTY));
-  std::cout << "Total points:" << " - " << data.size() << std::endl;
+  //derived 
+	std::cout << "Total points:" << " - " << data.size() << std::endl;
+  std::cout << "Time per beat:" << " - " << timePerBeat << std::endl;
 }
 
 void RhythmLevel::end() {
@@ -103,10 +113,17 @@ void RhythmLevel::end() {
 
 void RhythmLevel::tick() {
   ticks++;
+	barTicks++;
   if (ticks >= FPS) {
     songPosition++;
     ticks = 0;
   }
+	if (tupleIterator == data.end()) {
+    tupleIterator = data.begin();
+	} else if (barTicks >= timePerBeat) {
+    barTicks = 0;
+		tupleIterator++;
+	}
 }
 
 void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
@@ -121,14 +138,16 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
 }
 
 Beat * RhythmLevel::getNextBeat() {
-  switch (songPosition % 4) {
+	/*
+	switch (songPosition % 4) {
     case 0: return new Beat(LEFT);
 		case 1: return new Beat(UP);
 		case 2: return new Beat(DOWN);
 		case 3: return new Beat(RIGHT);
 	  default: return NULL;
-	}
+	} */
 
+  return tupleIterator;
 	
 	
 }
