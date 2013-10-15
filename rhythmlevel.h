@@ -12,6 +12,7 @@
 #include "sound.h"
 #include "globals.h"
 #include "tuple.h"
+#include "beatmanager.h"
 
 using std::string;
 using std::vector;
@@ -21,7 +22,8 @@ using std::getline;
 
 
 class RhythmLevel {
-  public:
+
+	public:
     RhythmLevel();
     RhythmLevel(const string levelFile);
     ~RhythmLevel();
@@ -31,8 +33,7 @@ class RhythmLevel {
     void end();
     Tuple getNextTuple();
     bool levelComplete();
-    class BeatManager;
-    registerManager(BeatManager * m);
+    void registerManager(BeatManager * m);
     unsigned int getTimeRemaining() { return songLength - songPosition; }
   private: 
     void tick();

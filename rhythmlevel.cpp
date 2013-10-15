@@ -1,5 +1,6 @@
 #include "rhythmlevel.h"
 
+
 RhythmLevel::RhythmLevel():
   ticks(0),
 	barTicks(0), 
@@ -24,7 +25,7 @@ RhythmLevel::RhythmLevel(const string levelName):
   tupleIterator = data.begin();
 }
 
-RhythmLevel::RegisterManager(BeatManager * m) {
+void RhythmLevel::registerManager(BeatManager * m) {
   manager = m;
 }
 

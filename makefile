@@ -13,7 +13,7 @@ main.o: main.cpp player.o sound.o inputmanager.o drawable.o entity.o beat.o rhyt
 
 track.o: track.h sprite.h drawable.h
 
-beatmanager.o: beatmanager.h beat.h entity.h sprite.h player.h rhythmlevel.h
+beatmanager.o: beatmanager.h beat.h entity.h sprite.h player.h rhythmlevel.h tuple.h
 
 tuple.o: tuple.h
 
