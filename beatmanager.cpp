@@ -23,8 +23,10 @@ void BeatManager::emitTuple(Tuple t) {
 	    t.output();
       Beat * newBeat = new Beat(t.getElement(i));
 		  activeBeats.push_back(newBeat);
+
 		}
   }
+  std::cout  << "BEATMANAGER.finishEmit" << std::endl;
 }
 
 
@@ -34,7 +36,6 @@ void BeatManager::update() {
 		   beatIterator != activeBeats.end();
 			 beatIterator++)
 	{
-      std::cout  << "BEATMANAGER.update" << std::endl;
       (*beatIterator)->update();
 	}
 }
@@ -100,6 +101,7 @@ void BeatManager::draw() {
 		   beatIterator != activeBeats.end();
 			 beatIterator++)
 	{
+      std::cout  << "BEATMANAGER.drawing individual" << std::endl;
       (*beatIterator)->draw();
 	}
   std::cout  << "BEATMANAGER.end drawing beats" << std::endl;

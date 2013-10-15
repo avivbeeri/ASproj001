@@ -38,12 +38,12 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
     manager->update(); 
     manager->draw(); 
      
-    if (tupleIterator == data.end()) {
+    if (tupleIterator >= data.end()) {
       tupleIterator = data.begin();
     } else if (barTicks >= FPS * timePerBeat) {
       if (songPosition % 2 == 0) {
         data.pop_back();
-        data.insert(tupleIterator, Tuple(LEFT, EMPTY, EMPTY, EMPTY)); 
+        data.insert(tupleIterator, Tuple(UP, EMPTY, EMPTY, EMPTY)); 
       }
       manager->emitTuple(*tupleIterator);
       tupleIterator++;
@@ -53,7 +53,6 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
     if (songPosition >= songLength) {
       song->stop();
     }
-     
   }
 }
 

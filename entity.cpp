@@ -59,7 +59,7 @@ bool Entity::onEvent(ALLEGRO_EVENT ev) {
 }
 
 void Entity::draw() {
-  if (live && sprite != NULL) {
+  if (live) {
 	  
 		sprite->draw(x,y);
 	}

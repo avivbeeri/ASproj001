@@ -128,7 +128,6 @@ int main(int argc, char **argv)
   al_register_event_source(event_queue, al_get_timer_event_source(timer));
   
   //begin game loop timer
-  level.begin();
   al_start_timer(timer);  
   ALLEGRO_EVENT ev;
   
@@ -137,6 +136,7 @@ int main(int argc, char **argv)
   double old_time = al_get_time();
 	int frames_done = 0;
   double currentFPS = 0;
+  level.begin();
 
 	while (!done) {
     al_wait_for_event(event_queue, &ev);
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
       if (state == RUNNING) {
-        songManager.update();
+        //songManager.update();
 
 				//Check the pass/fail conditions
 				if (!player.isAlive() || level.levelComplete()) {
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
       redraw = false;
       //Draw background 
       if (state == RUNNING) {
-				track.draw(0, HEIGHT);
+				//track.draw(0, HEIGHT);
 				track.draw(WIDTH - 350, HEIGHT); 
 				//draw UI
 				if (player.isAlive()) {
