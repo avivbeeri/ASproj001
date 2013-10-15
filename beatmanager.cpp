@@ -31,12 +31,13 @@ BeatManager::~BeatManager() {
 
 void BeatManager::playLevel(RhythmLevel * l) {
   level = l;
+	level->registerManager(this);
   level->begin();
 }
 
 void BeatManager::tick() {
   time++;
-	if (time >= 0.5 * FPS) {
+	if (time >= FPS) {
 		update();
   }
 	
@@ -98,15 +99,16 @@ void BeatManager::draw() {
 	}
 }
 
+void BeatManager::publishTuple(Tuple t) {
+	for (int i = 0; i < 4; i++) {
+		if (t.getElement(i) != EMPTY) {
+		  activeBeats.push_back(new Beat(t.getElement(i)));
+		}
+  }
+}
+
 void BeatManager::update() {
   time = 0; 
-  Beat * newBeat;
-  if (level != NULL) {
-    newBeat = level->getNextBeat();
-    if (newBeat != NULL) {
-      activeBeats.push_back(newBeat);
-    }
-  }
 	
   /* 
 	newBeat = new Beat(static_cast<KEY>(this->directionTest));

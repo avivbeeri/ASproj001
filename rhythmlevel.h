@@ -19,6 +19,7 @@ using std::ifstream;
 using std::ios;
 using std::getline;
 
+
 class RhythmLevel {
   public:
     RhythmLevel();
@@ -28,15 +29,18 @@ class RhythmLevel {
     void onEvent(ALLEGRO_EVENT ev);
     void begin();
     void end();
-    Beat * getNextBeat();
+    Tuple getNextTuple();
     bool levelComplete();
+    class BeatManager;
+    registerManager(BeatManager * m);
     unsigned int getTimeRemaining() { return songLength - songPosition; }
   private: 
     void tick();
     void loadFile(const string levelFile);
 
     Sound * song;
-    unsigned int ticks;
+    BeatManager * manager;
+		unsigned int ticks;
 		unsigned int barTicks;
     unsigned int songLength;
     unsigned int songPosition;

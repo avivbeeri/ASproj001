@@ -1,25 +1,31 @@
 #include "rhythmlevel.h"
 
 RhythmLevel::RhythmLevel():
-  songPosition(0),
   ticks(0),
 	barTicks(0), 
   enemyHP(15)
 {
-  song = new Sound("assets/music/loz.wav");
+  manager = NULL;
+	song = new Sound("assets/music/loz.wav");
   songLength = song->getLength() * 2;
-  tupleIterator = data.begin();
+  songPosition = 0;
+	tupleIterator = data.begin();
 }
 
 RhythmLevel::RhythmLevel(const string levelName):
   song(NULL),
   ticks(0),
 	barTicks(0),  
-  songPosition(0),
   enemyHP(15)
 {
+  manager = NULL;
+	songPosition = 0;
   loadFile(levelName);
   tupleIterator = data.begin();
+}
+
+RhythmLevel::RegisterManager(BeatManager * m) {
+  manager = m;
 }
 
 RhythmLevel::~RhythmLevel() {
@@ -123,6 +129,7 @@ void RhythmLevel::tick() {
 	} else if (barTicks >= timePerBeat) {
     barTicks = 0;
 		tupleIterator++;
+		manager->publishTuple(*tupleIterator);
 	}
 }
 
@@ -137,7 +144,7 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
   }
 }
 
-Beat * RhythmLevel::getNextBeat() {
+Tuple RhythmLevel::getNextTuple() {
 	/*
 	switch (songPosition % 4) {
     case 0: return new Beat(LEFT);
@@ -146,9 +153,11 @@ Beat * RhythmLevel::getNextBeat() {
 		case 3: return new Beat(RIGHT);
 	  default: return NULL;
 	} */
-
-  return tupleIterator;
-	
+	if (songPosition % 2) {
+    return Tuple(UP,  EMPTY, EMPTY, EMPTY);
+	} else {
+	  return (*tupleIterator);
+	}
 	
 }
 
