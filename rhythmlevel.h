@@ -20,28 +20,27 @@ using std::ifstream;
 using std::ios;
 using std::getline;
 
-
 class RhythmLevel {
 
 	public:
     RhythmLevel();
-    RhythmLevel(const string levelFile);
+    RhythmLevel(const string levelFile, BeatManager m);
     ~RhythmLevel();
-    void reset();
     void onEvent(ALLEGRO_EVENT ev);
+    void reset();
     void begin();
     void end();
-    Tuple getNextTuple();
     bool levelComplete();
     void registerManager(BeatManager * m);
     unsigned int getTimeRemaining() { return songLength - songPosition; }
   private: 
-    void tick();
     void loadFile(const string levelFile);
-
+    
     Sound * song;
     BeatManager * manager;
-		unsigned int ticks;
+
+		bool playing;
+    unsigned int ticks;
 		unsigned int barTicks;
     unsigned int songLength;
     unsigned int songPosition;

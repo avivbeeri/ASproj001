@@ -1,32 +1,21 @@
 #include "rhythmlevel.h"
 
-
-RhythmLevel::RhythmLevel():
-  ticks(0),
-	barTicks(0), 
-  enemyHP(15)
+RhythmLevel::RhythmLevel()
 {
   manager = NULL;
-	song = new Sound("assets/music/loz.wav");
+	reset();
+  song = new Sound("assets/music/loz.wav");
   songLength = song->getLength() * 2;
-  songPosition = 0;
 	tupleIterator = data.begin();
 }
 
-RhythmLevel::RhythmLevel(const string levelName):
-  song(NULL),
-  ticks(0),
-	barTicks(0),  
-  enemyHP(15)
+RhythmLevel::RhythmLevel(const string levelName, BeatManager m):
+  song(NULL)
 {
-  manager = NULL;
-	songPosition = 0;
+  manager = &m;
   loadFile(levelName);
   tupleIterator = data.begin();
-}
-
-void RhythmLevel::registerManager(BeatManager * m) {
-  manager = m;
+  reset();
 }
 
 RhythmLevel::~RhythmLevel() {
@@ -36,16 +25,65 @@ RhythmLevel::~RhythmLevel() {
 	}
 }
 
+void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
+  if (ev.type == ALLEGRO_EVENT_TIMER) {
+    
+    ticks++;
+    barTicks++;
+    
+    if (ticks >= FPS) {
+      songPosition++;
+      ticks = 0;
+    }
+   
+    manager->onEvent(ev);
+     
+    if (tupleIterator == data.end()) {
+      tupleIterator = data.begin();
+    } else if (barTicks >= timePerBeat) {
+      barTicks = 0;
+      tupleIterator++;
+      manager->emitTuple(*tupleIterator);
+    }
+    
+    if (songPosition >= songLength) {
+      song->stop();
+    }
+     
+  }
+}
+
+void RhythmLevel::registerManager(BeatManager * m) {
+  manager = m;
+}
+
+bool RhythmLevel::levelComplete() {
+  return (enemyHP == 0) || (songPosition == songLength);
+}
+
 void RhythmLevel::reset() {
   songPosition = 0;
   enemyHP = 15;
+  playing = false;
+  ticks = 0;
+  barTicks = 0;
 }
 
 void RhythmLevel::begin() {
   if (song != NULL) {
 	  song->play(ALLEGRO_PLAYMODE_LOOP);
   }
+  playing = true;
 }
+
+
+void RhythmLevel::end() {
+  if (song != NULL) {
+	  song->stop();
+	}
+  reset();
+}
+
 
 void RhythmLevel::loadFile(const string levelFileName) {
   ifstream levelFile (levelFileName.c_str(), ios::in);
@@ -77,8 +115,10 @@ void RhythmLevel::loadFile(const string levelFileName) {
 		} else if (parameter == "ARTIST") {
       artistName = value;
 		} else if (parameter == "BPM") {
-		  bpm = atoi(value.c_str());	
-		  timePerBeat = 1 / (double) bpm;
+      bpm = atoi(value.c_str());	
+		  // bpm = beats per minute = beats per (60 * seconds)
+      // so time between beats in seconds = 
+		  timePerBeat = 1 / (double) (bpm * 60);
 		} else if (parameter == "RESOLUTION") {
 		  resolution = atoi(value.c_str());	
 		} else if (parameter == "BARS") {
@@ -109,59 +149,4 @@ void RhythmLevel::loadFile(const string levelFileName) {
   //derived 
 	std::cout << "Total points:" << " - " << data.size() << std::endl;
   std::cout << "Time per beat:" << " - " << timePerBeat << std::endl;
-}
-
-void RhythmLevel::end() {
-  if (song != NULL) {
-	  song->stop();
-	}
-  reset();
-}
-
-void RhythmLevel::tick() {
-  ticks++;
-	barTicks++;
-  if (ticks >= FPS) {
-    songPosition++;
-    ticks = 0;
-  }
-	if (tupleIterator == data.end()) {
-    tupleIterator = data.begin();
-	} else if (barTicks >= timePerBeat) {
-    barTicks = 0;
-		tupleIterator++;
-		manager->publishTuple(*tupleIterator);
-	}
-}
-
-void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
-  if (ev.type == ALLEGRO_EVENT_TIMER) {
-    tick();
-    
-    if (songPosition >= songLength) {
-      song->stop();
-    }
-    
-  }
-}
-
-Tuple RhythmLevel::getNextTuple() {
-	/*
-	switch (songPosition % 4) {
-    case 0: return new Beat(LEFT);
-		case 1: return new Beat(UP);
-		case 2: return new Beat(DOWN);
-		case 3: return new Beat(RIGHT);
-	  default: return NULL;
-	} */
-	if (songPosition % 2) {
-    return Tuple(UP,  EMPTY, EMPTY, EMPTY);
-	} else {
-	  return (*tupleIterator);
-	}
-	
-}
-
-bool RhythmLevel::levelComplete() {
-  return (enemyHP == 0) || (songPosition == songLength);
 }

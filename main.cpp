@@ -22,6 +22,7 @@
 #include "track.h"
 #include "entity.h"
 
+#include "rhythmlevel.h"
 #include "beatmanager.h"
 
 //prototypes
@@ -74,7 +75,6 @@ int main(int argc, char **argv)
   al_reserve_samples(1); 
 	
 
-  RhythmLevel level("test.bms");
 
   ALLEGRO_FONT *font16 = al_load_ttf_font("assets/fonts/copyviol.ttf",16,0 );
   if (!font16) {
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
   downArrowSprite = new Sprite("assets/art/arrow_down.png");
   RhythmPlayer player;
   BeatManager songManager(player, 750);
-  BeatManager spellManager(player, 0);
+  RhythmLevel level("test.bms", songManager);
 
 
   Track track;
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
   al_register_event_source(event_queue, al_get_timer_event_source(timer));
   
   //begin game loop timer
-  songManager.playLevel(&level);
+  level.begin();
   al_start_timer(timer);  
   ALLEGRO_EVENT ev;
   
@@ -147,16 +147,14 @@ int main(int argc, char **argv)
     //distribute events to event listeners?
     inputManager->onEvent(ev);
 
-    songManager.onEvent(ev);
-    //spellManager.onEvent(ev);
+    level.onEvent(ev);
     //handle specific game event actions
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
       if (state == RUNNING) {
 				//Check the pass/fail conditions
-				songManager.tick();
-				if (!player.isAlive() || songManager.isGameOver()) {
+				if (!player.isAlive() || level.levelComplete()) {
 					state = GAMEOVER;
 				  level.end();
         }
@@ -184,7 +182,7 @@ int main(int argc, char **argv)
 			} else if (state == GAMEOVER) {
         if (inputManager->isPressed(SPACE)) {
 				  player.reset();
-          songManager.playLevel(&level);
+          level.begin();
 					state = RUNNING;	
 				}
 				if (inputManager->isPressed(ESCAPE)) {
