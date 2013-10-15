@@ -51,7 +51,7 @@ class RhythmLevel {
     unsigned int resolution;
 
     //game data
-    //vector<Tuple> data;
+    vector<Tuple> data;
     
 };
 

@@ -40,7 +40,7 @@ void RhythmLevel::loadFile(const string levelFileName) {
   if (!levelFile.is_open()) {
      //error
   }
-  
+  unsigned int barCount = 0; 
   string currentLine;
   while ( getline(levelFile, currentLine) ) {
     //parse strings
@@ -68,6 +68,8 @@ void RhythmLevel::loadFile(const string levelFileName) {
 		  bpm = atoi(value.c_str());	
 		} else if (parameter == "RESOLUTION") {
 		  resolution = atoi(value.c_str());	
+		} else if (parameter == "BARS") {
+		  barCount = atoi(value.c_str());	
 		} else if (parameter == "SIGNATURE") {
       pivot = value.find('/', 1);
 			float dividend = atof(value.substr(0, pivot).c_str());
@@ -86,7 +88,10 @@ void RhythmLevel::loadFile(const string levelFileName) {
   std::cout << "ARTIST" << " - " << artistName << std::endl;
   std::cout << "BPM" << " - " << bpm << std::endl;
   std::cout << "RESOLUTION" << " - " << resolution << std::endl;
+  std::cout << "BARS" << " - " << barCount << std::endl;
   std::cout << "SIGNATURE" << " - " << signature << std::endl;
+  data.resize(barCount * resolution, Tuple(EMPTY, EMPTY, EMPTY, EMPTY));
+  std::cout << "Total points:" << " - " << data.size() << std::endl;
 }
 
 void RhythmLevel::end() {

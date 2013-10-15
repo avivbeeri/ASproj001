@@ -4,8 +4,9 @@
 #include "globals.h"
 
 class Tuple {
-  Tuple(KEY, KEY, KEY, KEY);
-  KEY getElement(int i);
+  public:
+    Tuple(KEY, KEY, KEY, KEY);
+	  KEY getElement(int i);
   private:
     KEY element[4];
 };
