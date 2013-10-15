@@ -19,7 +19,8 @@ Beat::Beat(KEY type):
 		  this->setSprite(leftArrowSprite);
 		  break;
 	  default:
-		  break;
+		  setSprite(NULL);
+			break;
 	}
 
 }
