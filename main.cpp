@@ -148,6 +148,7 @@ int main(int argc, char **argv)
     inputManager->onEvent(ev);
 
     level.onEvent(ev);
+    songManager.onEvent(ev);
     //handle specific game event actions
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
@@ -161,6 +162,8 @@ int main(int argc, char **argv)
 			} else if (state == GAMEOVER) {
 			  
 			}
+
+      //-------NOTHING NEW BELOW HERE-----
 			redraw = true;
 
       double game_time = al_get_time();
@@ -171,6 +174,7 @@ int main(int argc, char **argv)
 			  old_time = game_time;
 		  }
 			frames_done++;
+      //-------NOTHING NEW ABOVE HERE-----
     } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
       //Process given button presses here
       if (state == RUNNING) {
@@ -209,11 +213,13 @@ int main(int argc, char **argv)
 				//draw entities
 
 				songManager.draw();
-				//spellManager.draw();
-				al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
+				
+        al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
 				al_draw_line(0, SLOT_BOTTOM, WIDTH, SLOT_BOTTOM, al_map_rgb(255,0,255), 4);      
+      
       } else if (state == GAMEOVER) {
-					al_draw_text(font16, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2,ALLEGRO_ALIGN_CENTER, "GAME OVER!"); 
+					al_draw_text(font16, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2,
+                        ALLEGRO_ALIGN_CENTER, "GAME OVER!"); 
 			}
 			al_draw_textf(font16, al_map_rgb(255,0,255), 0, 0, ALLEGRO_ALIGN_LEFT, "FPS: %f", currentFPS); 
 			//Display and reset buffer

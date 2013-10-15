@@ -21,7 +21,6 @@ class BeatManager {
 		void emitTuple(Tuple t);
 	private:
     list<Beat *> activeBeats;
-    list<Beat *> missedBeats;
 		RhythmPlayer &player;
     unsigned int offset;
 		unsigned int time;

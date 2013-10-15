@@ -27,7 +27,11 @@ RhythmLevel::~RhythmLevel() {
 
 void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
   if (ev.type == ALLEGRO_EVENT_TIMER) {
-    
+    if (!playing) 
+    {
+      return;
+    }
+
     ticks++;
     barTicks++;
     
@@ -36,14 +40,17 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
       ticks = 0;
     }
    
-    manager->onEvent(ev);
      
     if (tupleIterator == data.end()) {
       tupleIterator = data.begin();
-    } else if (barTicks >= timePerBeat) {
-      barTicks = 0;
-      tupleIterator++;
+    } else if (barTicks >= FPS * timePerBeat) {
+      if (songPosition % 2 == 0) {
+        data.pop_back();
+        data.insert(tupleIterator, Tuple(LEFT, EMPTY, EMPTY, EMPTY)); 
+      }
       manager->emitTuple(*tupleIterator);
+      tupleIterator++;
+      barTicks = 0;
     }
     
     if (songPosition >= songLength) {
@@ -118,7 +125,7 @@ void RhythmLevel::loadFile(const string levelFileName) {
       bpm = atoi(value.c_str());	
 		  // bpm = beats per minute = beats per (60 * seconds)
       // so time between beats in seconds = 
-		  timePerBeat = 1 / (double) (bpm * 60);
+		  timePerBeat = (1 / (double) bpm) * 60;
 		} else if (parameter == "RESOLUTION") {
 		  resolution = atoi(value.c_str());	
 		} else if (parameter == "BARS") {

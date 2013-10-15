@@ -15,3 +15,26 @@ KEY Tuple::getElement(int i) {
     return EMPTY;
   }
 }
+
+void Tuple::output() {
+  for (int i = 0; i < 4; i++) {
+    switch(element[i]) {
+      case LEFT:
+        std::cout << "LEFT ";
+        break;
+      case RIGHT:
+        std::cout << "RIGHT ";
+        break;
+      case DOWN:
+        std::cout << "DOWN ";
+        break;
+      case UP:
+        std::cout << "UP ";
+        break;
+      default:
+        std::cout << "EMPTY";
+        break;
+    }
+  }
+  std::cout << std::endl;
+}
