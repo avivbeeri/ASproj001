@@ -156,7 +156,6 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
       if (state == RUNNING) {
-        //songManager.update();
 
 				//Check the pass/fail conditions
 				if (!player.isAlive() || level.levelComplete()) {
@@ -206,7 +205,7 @@ int main(int argc, char **argv)
       redraw = false;
       //Draw background 
       if (state == RUNNING) {
-				//track.draw(0, HEIGHT);
+				track.draw(0, HEIGHT);
 				track.draw(WIDTH - 350, HEIGHT); 
 				//draw UI
 				if (player.isAlive()) {

@@ -23,21 +23,19 @@ using std::getline;
 class RhythmLevel {
 
 	public:
-    RhythmLevel();
-    RhythmLevel(const string levelFile, BeatManager m);
+    RhythmLevel(const string levelFile, BeatManager &m);
     ~RhythmLevel();
     void onEvent(ALLEGRO_EVENT ev);
     void reset();
     void begin();
     void end();
     bool levelComplete();
-    void registerManager(BeatManager * m);
     unsigned int getTimeRemaining() { return songLength - songPosition; }
   private: 
     void loadFile(const string levelFile);
     
+    BeatManager &manager;
     Sound * song;
-    BeatManager * manager;
 
 		bool playing;
     unsigned int ticks;

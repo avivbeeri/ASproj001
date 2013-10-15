@@ -1,18 +1,10 @@
 #include "rhythmlevel.h"
 
-RhythmLevel::RhythmLevel()
-{
-  manager = NULL;
-	reset();
-  song = new Sound("assets/music/loz.wav");
-  songLength = song->getLength() * 2;
-	tupleIterator = data.begin();
-}
-
-RhythmLevel::RhythmLevel(const string levelName, BeatManager m):
+RhythmLevel::RhythmLevel(const string levelName, BeatManager &m):
+  manager(m),
   song(NULL)
+
 {
-  manager = &m;
   loadFile(levelName);
   tupleIterator = data.begin();
   reset();
@@ -35,8 +27,6 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
       songPosition++;
       ticks = 0;
     }
-    manager->update(); 
-    manager->draw(); 
      
     if (tupleIterator >= data.end()) {
       tupleIterator = data.begin();
@@ -45,7 +35,7 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
         data.pop_back();
         data.insert(tupleIterator, Tuple(UP, EMPTY, EMPTY, EMPTY)); 
       }
-      manager->emitTuple(*tupleIterator);
+      manager.emitTuple(*tupleIterator);
       tupleIterator++;
       barTicks = 0;
     }
@@ -54,10 +44,6 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
       song->stop();
     }
   }
-}
-
-void RhythmLevel::registerManager(BeatManager * m) {
-  manager = m;
 }
 
 bool RhythmLevel::levelComplete() {
