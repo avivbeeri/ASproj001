@@ -83,7 +83,6 @@ void RhythmLevel::loadFile(const string levelFileName) {
   string currentLine;
   while ( getline(levelFile, currentLine) ) {
     //parse strings
-    //std::cout << currentLine << std::endl;
     if (currentLine.size() <= 0) {
       continue;
 		}

@@ -17,27 +17,13 @@ BeatManager::~BeatManager() {
 }
 
 void BeatManager::emitTuple(Tuple t) {
-  std::cout  << "BEATMANAGER.emitTuple" << std::endl;
   for (int i = 0; i < 4; i++) {
 		if (t.getElement(i) != EMPTY) {
-	    t.output();
       Beat * newBeat = new Beat(t.getElement(i));
 		  activeBeats.push_back(newBeat);
 
 		}
   }
-  std::cout  << "BEATMANAGER.finishEmit" << std::endl;
-}
-
-
-void BeatManager::update() {
-  list<Beat*>::iterator beatIterator;
-	for (beatIterator = activeBeats.begin();
-		   beatIterator != activeBeats.end();
-			 beatIterator++)
-	{
-      (*beatIterator)->update();
-	}
 }
 
 void BeatManager::onEvent(ALLEGRO_EVENT e) {
@@ -54,11 +40,9 @@ void BeatManager::onEvent(ALLEGRO_EVENT e) {
   
   do { 
     if ((*beatIterator)->isLive()) {
-      std::cout  << "BEATMANAGER.sendEvents" << std::endl;
       eventConsumed = (*beatIterator)->onEvent(e);
     } else {
        
-      std::cout  << "BEATMANAGER.culling missed beats" << std::endl;
       Beat * oldBeat = *beatIterator;
       beatIterator = activeBeats.erase(beatIterator);
       if (oldBeat->wasMissed()) {
@@ -96,13 +80,10 @@ void BeatManager::draw() {
   //iterate through all beats to draw them
 	list<Beat*>::iterator beatIterator;
 
-  std::cout  << "BEATMANAGER.begin drawing beats" << std::endl;
 	for (beatIterator = activeBeats.begin();
 		   beatIterator != activeBeats.end();
 			 beatIterator++)
 	{
-      std::cout  << "BEATMANAGER.drawing individual" << std::endl;
       (*beatIterator)->draw();
-	}
-  std::cout  << "BEATMANAGER.end drawing beats" << std::endl;
+  }
 }

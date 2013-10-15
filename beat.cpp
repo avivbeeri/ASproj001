@@ -27,7 +27,6 @@ Beat::Beat(KEY type):
 }
 
 void Beat::update() {
-	std::cout << "BEAT.updating" << std::endl;
   y += 4;
   if (y > HEIGHT) {
 		kill();

@@ -19,7 +19,6 @@ Entity::Entity(int x, int y) {
 
 Entity::~Entity() {
   //Empty destructor
-  std::cout << "destructing" << std::endl;
 }
 
 
