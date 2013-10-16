@@ -31,10 +31,6 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
     if (tupleIterator >= data.end()) {
       tupleIterator = data.begin();
     } else if (barTicks >= FPS * timePerBeat) {
-      if (songPosition % 2 == 0) {
-        data.pop_back();
-        data.insert(tupleIterator, Tuple(UP, EMPTY, EMPTY, EMPTY)); 
-      }
       manager.emitTuple(*tupleIterator);
       tupleIterator++;
       barTicks = 0;
@@ -87,12 +83,32 @@ void RhythmLevel::loadFile(const string levelFileName) {
       continue;
 		}
 		if (currentLine.at(0) != '#') {
-      continue;
+			continue;
     }
-    //a potential command, process
+    
+		if (currentLine == "#DATA") {
+      //rhythm data begins here
+      data.resize(barCount * resolution, Tuple(EMPTY, EMPTY, EMPTY, EMPTY));
+		  continue;
+		}
+
+		//a potential command, process
     unsigned int pivot = currentLine.find(' ', 2);
     if (pivot == string::npos) {
-      continue;
+      //maybe its not a header directive?.
+      
+			std::cout << "checking for non-header: " <<currentLine  << std::endl;
+			pivot = currentLine.find(':', 5);
+      if (pivot == string::npos) {
+			  continue;
+			}
+			std::cout << currentLine.substr(4, 2) << std::endl;
+			int barNo = atoi(currentLine.substr(1, 3).c_str());
+      int barPoint = atoi(currentLine.substr(4, 2).c_str());
+			std::cout << "Data for: "<< barNo << ", " << barPoint << std::endl;
+			string lineData = currentLine.substr(pivot+1, currentLine.size() - pivot);
+		  data.at(barNo * resolution + barPoint) = Tuple(lineData);
+		  	
 		}
     string parameter = currentLine.substr(1, pivot-1);
     
@@ -125,7 +141,6 @@ void RhythmLevel::loadFile(const string levelFileName) {
 	} 
   levelFile.close();
   
-  data.resize(barCount * resolution, Tuple(EMPTY, EMPTY, EMPTY, EMPTY));
   
 	//Data output test
 	std::cout << "TITLE" << " - " << songName << std::endl;
