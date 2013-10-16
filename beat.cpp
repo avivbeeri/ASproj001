@@ -1,5 +1,6 @@
 #include "beat.h"
 #include "globals.h"
+#include <iostream>
 
 Beat::Beat(KEY type):
   Entity()
@@ -19,13 +20,14 @@ Beat::Beat(KEY type):
 		  this->setSprite(leftArrowSprite);
 		  break;
 	  default:
-		  break;
+		  setSprite(NULL);
+			break;
 	}
 
 }
 
 void Beat::update() {
-	y += 4;
+  y += 4;
   if (y > HEIGHT) {
 		kill();
 		missed = true;
@@ -45,8 +47,8 @@ bool Beat::onEvent(ALLEGRO_EVENT ev) {
         destruction, and score points.*/
 
       if (inputManager->isPressed(type)) {
-        missed = false; 
         kill();
+        missed = false; 
         return true;
       }
     } else if (ev.type == ALLEGRO_EVENT_TIMER) {

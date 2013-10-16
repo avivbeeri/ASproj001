@@ -1,4 +1,5 @@
 #include "entity.h"
+#include <iostream>
 
 //constructor
 
@@ -58,7 +59,8 @@ bool Entity::onEvent(ALLEGRO_EVENT ev) {
 
 void Entity::draw() {
   if (live) {
-	  sprite->draw(x,y);
+	  
+		sprite->draw(x,y);
 	}
 }
 
