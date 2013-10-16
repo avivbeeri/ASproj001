@@ -31,6 +31,7 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
     if (tupleIterator >= data.end()) {
       tupleIterator = data.begin();
     } else if (barTicks >= FPS * timePerBeat) {
+      tupleIterator->output();
       manager.emitTuple(*tupleIterator);
       tupleIterator++;
       barTicks = 0;
@@ -96,11 +97,11 @@ void RhythmLevel::loadFile(const string levelFileName) {
 		}
 
 		//a potential command, process
-    unsigned int pivot = currentLine.find(' ', 2);
+    size_t pivot = currentLine.find(' ', 2);
     if (pivot == string::npos) {
       //maybe its not a header directive?.
       
-			pivot = currentLine.find(':', 5);
+			pivot = currentLine.find(':', 1);
       if (pivot == string::npos) {
 		    std::cerr << "Found an invalid directive." << std::endl;
 			  continue;
