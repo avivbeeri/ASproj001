@@ -8,13 +8,16 @@ Beat::Beat(KEY type):
   this->type = type;  
   switch(type) {
     case UP: 
-		  setSprite(upArrowSprite);
+		  setX(70);
+			setSprite(upArrowSprite);
 		  break;
     case DOWN: 
 		  setSprite(downArrowSprite);
+		  setX(2 * 70);
 		  break;
     case RIGHT: 
 		  this->setSprite(rightArrowSprite);
+		  setX(3 * 70);
 		  break;
     case LEFT: 
 		  this->setSprite(leftArrowSprite);
