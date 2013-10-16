@@ -88,8 +88,11 @@ int main(int argc, char **argv)
   downArrowSprite = new Sprite("assets/art/arrow_down.png");
   RhythmPlayer player;
   BeatManager songManager(player, 750);
-  RhythmLevel level("test.bms", songManager);
-
+	string fileName = "test.bms";
+	if (argc > 1) {
+    fileName = string(argv[1]);
+	}
+	RhythmLevel level(fileName, songManager);
 
   Track track;
   /*
