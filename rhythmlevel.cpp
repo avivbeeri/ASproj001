@@ -74,6 +74,8 @@ void RhythmLevel::loadFile(const string levelFileName) {
   ifstream levelFile (levelFileName.c_str(), ios::in);
   if (!levelFile.is_open()) {
      //error
+		 std::cerr << "Couldn't open the level file" << std::endl;
+		 return;
   }
   unsigned int barCount = 0; 
   string currentLine;
@@ -83,6 +85,7 @@ void RhythmLevel::loadFile(const string levelFileName) {
       continue;
 		}
 		if (currentLine.at(0) != '#') {
+		  std::cerr << "Found an invalid command." << std::endl;
 			continue;
     }
     
@@ -97,15 +100,13 @@ void RhythmLevel::loadFile(const string levelFileName) {
     if (pivot == string::npos) {
       //maybe its not a header directive?.
       
-			std::cout << "checking for non-header: " <<currentLine  << std::endl;
 			pivot = currentLine.find(':', 5);
       if (pivot == string::npos) {
+		    std::cerr << "Found an invalid directive." << std::endl;
 			  continue;
 			}
-			std::cout << currentLine.substr(4, 2) << std::endl;
 			int barNo = atoi(currentLine.substr(1, 3).c_str());
       int barPoint = atoi(currentLine.substr(4, 2).c_str());
-			std::cout << "Data for: "<< barNo << ", " << barPoint << std::endl;
 			string lineData = currentLine.substr(pivot+1, currentLine.size() - pivot);
 		  data.at(barNo * resolution + barPoint) = Tuple(lineData);
 		  	
