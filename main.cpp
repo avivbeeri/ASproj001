@@ -22,6 +22,7 @@
 #include "track.h"
 #include "entity.h"
 
+#include "rhythmlevel.h"
 #include "beatmanager.h"
 
 //prototypes
@@ -32,7 +33,7 @@ int main(int argc, char **argv)
 {
   ALLEGRO_DISPLAY *display = NULL;
   ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-  //ALLEGRO_MONITOR_INFO info;
+  ALLEGRO_MONITOR_INFO info;
   ALLEGRO_TIMER *timer = NULL;
   
   bool done = false;
@@ -47,20 +48,28 @@ int main(int argc, char **argv)
      return -1;
   }
 
-  /*
+  
   al_get_monitor_info(0, &info);
   int w = info.x2 - info.x1; // Assume this is 1366 
   int h = info.y2 - info.y1; // Assume this is 768 
   al_set_new_display_flags(ALLEGRO_FULLSCREEN);
-  */
   
-  int w = WIDTH;
-  int h = HEIGHT;
+  
+  //int w = WIDTH;
+  //int h = HEIGHT;
   display = al_create_display(w, h);
   if(!display) {
      fprintf(stderr, "failed to create display!\n");
      return -1;
   }
+
+  float scaleWidth = w / (float)WIDTH;
+  float scaleHeight = h / (float)HEIGHT;
+  float scale = std::min(scaleWidth, scaleHeight);
+
+  float newX = (w - (WIDTH * scale));
+  float newY = (h - (HEIGHT * scale));
+
 
   al_init_primitives_addon();
   al_init_image_addon();
@@ -73,10 +82,7 @@ int main(int argc, char **argv)
 	//Resource initialisation
   al_reserve_samples(1); 
 	
-	Sound music("assets/music/loz.wav");
-	//music.play();
 
-  RhythmLevel level;
 
   ALLEGRO_FONT *font16 = al_load_ttf_font("assets/fonts/copyviol.ttf",16,0 );
   if (!font16) {
@@ -90,8 +96,11 @@ int main(int argc, char **argv)
   downArrowSprite = new Sprite("assets/art/arrow_down.png");
   RhythmPlayer player;
   BeatManager songManager(player, 750);
-  BeatManager spellManager(player, 0);
-
+	string fileName = "test.bms";
+	if (argc > 1) {
+    fileName = string(argv[1]);
+	}
+	RhythmLevel level(fileName, songManager);
 
   Track track;
   /*
@@ -130,7 +139,6 @@ int main(int argc, char **argv)
   al_register_event_source(event_queue, al_get_timer_event_source(timer));
   
   //begin game loop timer
-  songManager.playLevel(&level);
   al_start_timer(timer);  
   ALLEGRO_EVENT ev;
   
@@ -139,32 +147,37 @@ int main(int argc, char **argv)
   double old_time = al_get_time();
 	int frames_done = 0;
   double currentFPS = 0;
+  level.begin();
 
 	while (!done) {
     al_wait_for_event(event_queue, &ev);
     
     if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-      //music.stop();
       done = true;
     }
     //distribute events to event listeners?
     inputManager->onEvent(ev);
 
-    songManager.onEvent(ev);
-    //spellManager.onEvent(ev);
+    if (state == RUNNING) {
+      songManager.onEvent(ev);
+      level.onEvent(ev);
+    }
     //handle specific game event actions
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
       //Update entities
       if (state == RUNNING) {
+
 				//Check the pass/fail conditions
-				songManager.tick();
-				if (!player.isAlive() || songManager.isGameOver()) {
+				if (!player.isAlive() || level.levelComplete()) {
 					state = GAMEOVER;
-				}
+				  level.end();
+        }
 			} else if (state == GAMEOVER) {
 			  
 			}
+
+      //-------NOTHING NEW BELOW HERE-----
 			redraw = true;
 
       double game_time = al_get_time();
@@ -175,18 +188,19 @@ int main(int argc, char **argv)
 			  old_time = game_time;
 		  }
 			frames_done++;
+      //-------NOTHING NEW ABOVE HERE-----
     } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
       //Process given button presses here
       if (state == RUNNING) {
 				if (inputManager->isPressed(ESCAPE)) {
 					//quit the game or return to the menu, when there is a menu
 					state = GAMEOVER;
-					music.stop();
+          level.end();
 				}
 			} else if (state == GAMEOVER) {
         if (inputManager->isPressed(SPACE)) {
 				  player.reset();
-					music.play();
+          level.begin();
 					state = RUNNING;	
 				}
 				if (inputManager->isPressed(ESCAPE)) {
@@ -201,6 +215,13 @@ int main(int argc, char **argv)
       //time to redraw the screen
       redraw = false;
       //Draw background 
+      ALLEGRO_TRANSFORM transform;
+      al_identity_transform(&transform);
+      al_scale_transform(&transform, scale, scale); // scale x and y by 2
+      al_translate_transform(&transform, newX, newY);
+      al_use_transform(&transform);
+      
+      
       if (state == RUNNING) {
 				track.draw(0, HEIGHT);
 				track.draw(WIDTH - 350, HEIGHT); 
@@ -208,17 +229,18 @@ int main(int argc, char **argv)
 				if (player.isAlive()) {
 					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
 					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 80,0, "Time remaining: %u", level.getTimeRemaining()); 
-    			al_draw_textf(font16, al_map_rgb(255,255,255), 400, 40, 0, "Song length: %u", music.getLength());
 
 				 }
 				//draw entities
 
 				songManager.draw();
-				//spellManager.draw();
-				al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
+				
+        al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
 				al_draw_line(0, SLOT_BOTTOM, WIDTH, SLOT_BOTTOM, al_map_rgb(255,0,255), 4);      
+      
       } else if (state == GAMEOVER) {
-					al_draw_text(font16, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2,ALLEGRO_ALIGN_CENTER, "GAME OVER!"); 
+					al_draw_text(font16, al_map_rgb(255,255,255), WIDTH/2, HEIGHT/2,
+                        ALLEGRO_ALIGN_CENTER, "GAME OVER!"); 
 			}
 			al_draw_textf(font16, al_map_rgb(255,0,255), 0, 0, ALLEGRO_ALIGN_LEFT, "FPS: %f", currentFPS); 
 			//Display and reset buffer
