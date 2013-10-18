@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 {
   ALLEGRO_DISPLAY *display = NULL;
   ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-  //ALLEGRO_MONITOR_INFO info;
+  ALLEGRO_MONITOR_INFO info;
   ALLEGRO_TIMER *timer = NULL;
   
   bool done = false;
@@ -48,20 +48,28 @@ int main(int argc, char **argv)
      return -1;
   }
 
-  /*
+  
   al_get_monitor_info(0, &info);
   int w = info.x2 - info.x1; // Assume this is 1366 
   int h = info.y2 - info.y1; // Assume this is 768 
   al_set_new_display_flags(ALLEGRO_FULLSCREEN);
-  */
   
-  int w = WIDTH;
-  int h = HEIGHT;
+  
+  //int w = WIDTH;
+  //int h = HEIGHT;
   display = al_create_display(w, h);
   if(!display) {
      fprintf(stderr, "failed to create display!\n");
      return -1;
   }
+
+  float scaleWidth = w / (float)WIDTH;
+  float scaleHeight = h / (float)HEIGHT;
+  float scale = std::min(scaleWidth, scaleHeight);
+
+  float newX = (w - (WIDTH * scale));
+  float newY = (h - (HEIGHT * scale));
+
 
   al_init_primitives_addon();
   al_init_image_addon();
@@ -207,6 +215,13 @@ int main(int argc, char **argv)
       //time to redraw the screen
       redraw = false;
       //Draw background 
+      ALLEGRO_TRANSFORM transform;
+      al_identity_transform(&transform);
+      al_scale_transform(&transform, scale, scale); // scale x and y by 2
+      al_translate_transform(&transform, newX, newY);
+      al_use_transform(&transform);
+      
+      
       if (state == RUNNING) {
 				track.draw(0, HEIGHT);
 				track.draw(WIDTH - 350, HEIGHT); 
