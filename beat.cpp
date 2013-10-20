@@ -26,7 +26,7 @@ Beat::Beat(KEY type, double timePerBeat):
 		  setSprite(NULL);
 			break;
 	}
-  this->speed = (SLOT_TOP / ((timePerBeat) * 60 * 10));
+  this->speed = (SLOT_TOP / ((timePerBeat) * 60 * 5));
 }
 
 void Beat::update() {
