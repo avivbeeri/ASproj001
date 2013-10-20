@@ -8,6 +8,7 @@
 #include <fstream>
 #include <allegro5/allegro.h>
 
+#include "timeout.h"
 #include "beat.h"
 #include "sound.h"
 #include "globals.h"
@@ -36,6 +37,7 @@ class RhythmLevel {
     
     BeatManager &manager;
     Sound * song;
+    Timeout timeout;
 
 		bool playing;
     unsigned int ticks;

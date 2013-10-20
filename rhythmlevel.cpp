@@ -2,7 +2,8 @@
 
 RhythmLevel::RhythmLevel(const string levelName, BeatManager &m):
   manager(m),
-  song(NULL)
+  song(NULL),
+  timeout(1)
 
 {
   loadFile(levelName);
@@ -19,7 +20,12 @@ RhythmLevel::~RhythmLevel() {
 
 void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
   if (ev.type == ALLEGRO_EVENT_TIMER) {
-
+    timeout.onEvent(ev);
+    if (timeout.done()) {
+      if (song != NULL) {
+        song->play(ALLEGRO_PLAYMODE_LOOP);
+      }
+    }
     ticks++;
     barTicks++;
     
@@ -55,10 +61,9 @@ void RhythmLevel::reset() {
 }
 
 void RhythmLevel::begin() {
-  if (song != NULL) {
-	  song->play(ALLEGRO_PLAYMODE_LOOP);
-  }
   playing = true;
+  timeout.start();
+  
 }
 
 
@@ -152,5 +157,5 @@ void RhythmLevel::loadFile(const string levelFileName) {
   std::cout << "SIGNATURE" << " - " << signature << std::endl;
   //derived 
 	std::cout << "Total points:" << " - " << data.size() << std::endl;
-  std::cout << "Time per beat:" << " - " << timePerBeat << std::endl;
+  std::cout << "Time per beat in seconds:" << " - " << timePerBeat << std::endl;
 }
