@@ -21,3 +21,6 @@ game
 
 #Misc temp files
 *.ods#
+
+#MS folder files
+*.db
