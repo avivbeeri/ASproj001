@@ -37,7 +37,7 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
     if (tupleIterator >= data.end()) {
       tupleIterator = data.begin();
     } else if (barTicks >= FPS * timePerBeat) {
-      manager.emitTuple(*tupleIterator);
+      manager.emitTuple(*tupleIterator, timePerBeat);
       tupleIterator++;
       barTicks = 0;
     }
