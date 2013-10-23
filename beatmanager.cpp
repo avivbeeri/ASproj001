@@ -53,7 +53,7 @@ void BeatManager::onEvent(ALLEGRO_EVENT e) {
       if (oldBeat->wasMissed()) {
         player.takeDamage(1);
       } else {
-        player.heal(1);
+        //player.heal(1);
       }
       delete oldBeat;
       

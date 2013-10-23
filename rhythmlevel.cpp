@@ -118,7 +118,10 @@ void RhythmLevel::loadFile(const string levelFileName) {
 			int barNo = atoi(currentLine.substr(1, 3).c_str());
       int barPoint = atoi(currentLine.substr(4, 2).c_str());
 			string lineData = currentLine.substr(pivot+1, currentLine.size() - pivot);
-		  data.at(barNo * resolution + barPoint) = Tuple(lineData);
+		  if (( ((barNo - 1) * resolution) + barPoint) < 0) {
+				return;
+		  }
+			data.at((barNo - 1) * resolution + barPoint ) = Tuple(lineData);
 		  	
 		}
     string parameter = currentLine.substr(1, pivot-1);
