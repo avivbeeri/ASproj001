@@ -198,6 +198,8 @@ int main(int argc, char **argv)
 					//quit the game or return to the menu, when there is a menu
 					state = GAMEOVER;
           level.end();
+				} else if (inputManager->isPressed(SPACE)) {
+          player.heal(100);
 				}
 			} else if (state == GAMEOVER) {
         if (inputManager->isPressed(SPACE)) {
