@@ -92,10 +92,10 @@ int main(int argc, char **argv)
 	  return -1;
 	}
 
-  leftArrowSprite = new Sprite("assets/art/arrow_left.png");
-  rightArrowSprite = new Sprite("assets/art/arrow_right.png");
-  upArrowSprite = new Sprite("assets/art/arrow_up.png");
-  downArrowSprite = new Sprite("assets/art/arrow_down.png");
+  leftArrowSprite = new Sprite("assets/art/x600/arrow_left.png");
+  rightArrowSprite = new Sprite("assets/art/x600/arrow_right.png");
+  upArrowSprite = new Sprite("assets/art/x600/arrow_up.png");
+  downArrowSprite = new Sprite("assets/art/x600/arrow_down.png");
   RhythmPlayer player;
   BeatManager songManager(player, 750);
 	string fileName = "test.bms";
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
       
       if (state == RUNNING) {
 				track.draw(0, HEIGHT);
-				track.draw(WIDTH - 350, HEIGHT); 
+				track.draw(WIDTH - 250, HEIGHT); 
 				//draw UI
 				if (player.isAlive()) {
 					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
