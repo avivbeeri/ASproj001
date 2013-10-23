@@ -16,10 +16,10 @@ BeatManager::~BeatManager() {
   }
 }
 
-void BeatManager::emitTuple(Tuple t) {
+void BeatManager::emitTuple(Tuple t, double timePerBeat) {
   for (int i = 0; i < 4; i++) {
 		if (t.getElement(i) != EMPTY) {
-      Beat * newBeat = new Beat(t.getElement(i));
+      Beat * newBeat = new Beat(t.getElement(i), timePerBeat);
 		  activeBeats.push_back(newBeat);
 
 		}

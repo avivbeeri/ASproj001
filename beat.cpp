@@ -2,7 +2,7 @@
 #include "globals.h"
 #include <iostream>
 
-Beat::Beat(KEY type):
+Beat::Beat(KEY type, double timePerBeat):
   Entity()
 {
   this->type = type;  
@@ -26,11 +26,12 @@ Beat::Beat(KEY type):
 		  setSprite(NULL);
 			break;
 	}
-
+  setY(-70);
+  this->speed = ((SLOT_TOP+70) / ((timePerBeat) * 60 * 5));
 }
 
 void Beat::update() {
-  y += 4;
+  y += speed;
   if (y > HEIGHT) {
 		kill();
 		missed = true;

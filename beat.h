@@ -9,13 +9,14 @@
 class Beat : public Entity {
 
   public:
-	  Beat(KEY type);
+	  Beat(KEY type, double timePerBeat);
     virtual void update();
 		bool wasMissed() { return missed; }
 		bool onEvent(ALLEGRO_EVENT e);
   private:
 	  KEY type; 
 		bool missed;
+    int speed;
 };
 
 #endif

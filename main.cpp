@@ -25,6 +25,8 @@
 #include "rhythmlevel.h"
 #include "beatmanager.h"
 
+using std::min;
+
 //prototypes
 void drawTrack(int x);
 enum STATE {RUNNING, GAMEOVER};
@@ -65,7 +67,7 @@ int main(int argc, char **argv)
 
   float scaleWidth = w / (float)WIDTH;
   float scaleHeight = h / (float)HEIGHT;
-  float scale = std::min(scaleWidth, scaleHeight);
+  float scale = min(scaleWidth, scaleHeight);
 
   float newX = (w - (WIDTH * scale));
   float newY = (h - (HEIGHT * scale));
