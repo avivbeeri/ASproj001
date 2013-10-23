@@ -204,7 +204,8 @@ int main(int argc, char **argv)
 			} else if (state == GAMEOVER) {
         if (inputManager->isPressed(SPACE)) {
 				  player.reset();
-          level.begin();
+          level.reset();
+					level.begin();
 					state = RUNNING;	
 				}
 				if (inputManager->isPressed(ESCAPE)) {

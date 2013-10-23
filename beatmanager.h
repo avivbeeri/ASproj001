@@ -17,7 +17,8 @@ class BeatManager {
     BeatManager(RhythmPlayer &player, unsigned int offset);
     ~BeatManager();
     void draw();
-    void onEvent(ALLEGRO_EVENT e);
+    void reset();
+		void onEvent(ALLEGRO_EVENT e);
 		void emitTuple(Tuple t, double timePerBeat);
 	private:
     list<Beat *> activeBeats;

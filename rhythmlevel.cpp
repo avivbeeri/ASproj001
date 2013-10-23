@@ -36,12 +36,13 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
      
     if (tupleIterator >= data.end()) {
       tupleIterator = data.begin();
+			barTicks = 0;
     } else if (barTicks >= FPS * timePerArrow) {
       manager.emitTuple(*tupleIterator, timePerBeat);
       tupleIterator++;
       barTicks = 0;
     }
-    
+	  
     if (songPosition >= songLength) {
       song->stop();
     }
@@ -58,6 +59,7 @@ void RhythmLevel::reset() {
   playing = false;
   ticks = 0;
   barTicks = 0;
+  manager.reset();
 }
 
 void RhythmLevel::begin() {

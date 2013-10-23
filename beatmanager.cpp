@@ -9,6 +9,11 @@ BeatManager::BeatManager(RhythmPlayer &p, unsigned int oset):
 {}
 
 BeatManager::~BeatManager() {
+  reset();
+}
+
+void BeatManager::reset() {
+
   while (!activeBeats.empty()) {
     Beat * ptr = activeBeats.front();
 		activeBeats.pop_front();
