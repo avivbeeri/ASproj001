@@ -3,8 +3,8 @@
 RhythmLevel::RhythmLevel(const string levelName, BeatManager &m):
   manager(m),
   song(NULL),
-  timeout(0)
-
+  timeout(0),
+  barTime(0)
 {
   loadFile(levelName);
   tupleIterator = data.begin();
@@ -19,34 +19,34 @@ RhythmLevel::~RhythmLevel() {
 }
 
 void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
+  timeout.onEvent(ev);
   if (ev.type == ALLEGRO_EVENT_TIMER) {
-    timeout.onEvent(ev);
-    if (timeout.done()) {
-      if (song != NULL) {
-        song->play(ALLEGRO_PLAYMODE_LOOP);
-      }
-    }
     ticks++;
-    barTicks++;
     
     if (ticks >= FPS) {
       songPosition++;
       ticks = 0;
     }
      
-    if (tupleIterator >= data.end()) {
-      tupleIterator = data.begin();
-			barTicks = 0;
-    } else if (barTicks >= FPS * timePerArrow) {
-      manager.emitTuple(*tupleIterator, timePerBeat);
-      tupleIterator++;
-      barTicks = 0;
-    }
 	  
     if (songPosition >= songLength) {
       song->stop();
-    }
+      playing = false;
+		}
   }
+  if (timeout.done()) {
+    playing = true;
+  }
+	if (playing) {
+		if (tupleIterator >= data.end()) {
+			tupleIterator = data.begin();
+			barTime = al_get_time();
+		} else if (al_get_time() - barTime >= timePerArrow) {
+			manager.emitTuple(*tupleIterator, timePerBeat);
+			tupleIterator++;
+			barTime = al_get_time();
+		}
+	}
 }
 
 bool RhythmLevel::levelComplete() {
@@ -58,12 +58,12 @@ void RhythmLevel::reset() {
   enemyHP = 15;
   playing = false;
   ticks = 0;
-  barTicks = 0;
+  barTime = 0;
   manager.reset();
 }
 
 void RhythmLevel::begin() {
-  playing = true;
+  song->play(ALLEGRO_PLAYMODE_LOOP);
   timeout.start();
   
 }
@@ -102,7 +102,7 @@ void RhythmLevel::loadFile(const string levelFileName) {
 		  std::cout << timePerBeat * beatsPerBar << std::endl;
 			std::cout << beatsPerBar / (double) resolution << std::endl;
 			timePerArrow = timePerBeat * (beatsPerBar / (double)resolution);
-		  continue;
+			continue;
 		}
 
 		//a potential command, process
@@ -139,6 +139,8 @@ void RhythmLevel::loadFile(const string levelFileName) {
 		  timePerBeat = (1 / (double) bpm) * 60;
 		} else if (parameter == "RESOLUTION") {
 		  resolution = atoi(value.c_str());	
+		} else if (parameter == "DELAY") {
+		  timeout.setTimeout(atof(value.c_str()));	
 		} else if (parameter == "BARS") {
 		  barCount = atoi(value.c_str());	
 		} else if (parameter == "SIGNATURE") {

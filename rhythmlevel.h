@@ -41,7 +41,7 @@ class RhythmLevel {
 
 		bool playing;
     unsigned int ticks;
-		unsigned int barTicks;
+		double barTime;
     unsigned int songLength;
     unsigned int songPosition;
     unsigned short enemyHP;

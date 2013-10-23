@@ -9,13 +9,14 @@ class Timeout {
   public:
     Timeout(double seconds);
     void start();
-    void onEvent(ALLEGRO_EVENT ev);
+    void setTimeout(double seconds);
+		void onEvent(ALLEGRO_EVENT ev);
     bool done();
   private:
     double timeStart;
     double current;
     double length;
-    timer_state state;; 
+    timer_state state; 
 };
 
 #endif
