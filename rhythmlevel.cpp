@@ -3,7 +3,7 @@
 RhythmLevel::RhythmLevel(const string levelName, BeatManager &m):
   manager(m),
   song(NULL),
-  timeout(1)
+  timeout(0)
 
 {
   loadFile(levelName);
