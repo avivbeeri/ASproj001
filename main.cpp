@@ -98,7 +98,7 @@ int main(int argc, char **argv)
   downArrowSprite = new Sprite("assets/art/x600/arrow_down.png");
   RhythmPlayer player;
   BeatManager songManager(player, 750);
-	string fileName = "test.bms";
+	string fileName = "minimal.bms";
 	if (argc > 1) {
     fileName = string(argv[1]);
 	}
@@ -240,7 +240,8 @@ int main(int argc, char **argv)
 
 				songManager.draw();
 				
-        al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
+        
+				al_draw_line(0, SLOT_TOP, WIDTH, SLOT_TOP, al_map_rgb(255,0,255), 4);      
 				al_draw_line(0, SLOT_BOTTOM, WIDTH, SLOT_BOTTOM, al_map_rgb(255,0,255), 4);      
       
       } else if (state == GAMEOVER) {
