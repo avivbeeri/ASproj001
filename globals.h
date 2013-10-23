@@ -13,6 +13,9 @@ extern const int WIDTH;
 extern const int SLOT_TOP;
 extern const int SLOT_BOTTOM;
 
+extern const int arrowOffset;
+extern const int edgeWidth;
+
 extern Sprite * leftArrowSprite;
 extern Sprite * rightArrowSprite;
 extern Sprite * downArrowSprite;
