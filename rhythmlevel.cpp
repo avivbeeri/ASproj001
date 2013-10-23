@@ -36,7 +36,7 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
      
     if (tupleIterator >= data.end()) {
       tupleIterator = data.begin();
-    } else if (barTicks >= FPS * timePerBeat) {
+    } else if (barTicks >= FPS * timePerArrow) {
       manager.emitTuple(*tupleIterator, timePerBeat);
       tupleIterator++;
       barTicks = 0;
@@ -97,6 +97,9 @@ void RhythmLevel::loadFile(const string levelFileName) {
 		if (currentLine == "#DATA") {
       //rhythm data begins here
       data.resize(barCount * resolution, Tuple(EMPTY, EMPTY, EMPTY, EMPTY));
+		  std::cout << timePerBeat * beatsPerBar << std::endl;
+			std::cout << beatsPerBar / (double) resolution << std::endl;
+			timePerArrow = timePerBeat * (beatsPerBar / (double)resolution);
 		  continue;
 		}
 
@@ -135,9 +138,9 @@ void RhythmLevel::loadFile(const string levelFileName) {
 		  barCount = atoi(value.c_str());	
 		} else if (parameter == "SIGNATURE") {
       pivot = value.find('/', 1);
-			float dividend = atof(value.substr(0, pivot).c_str());
+			beatsPerBar = atoi(value.substr(0, pivot).c_str());
 			int  divisor = atoi(value.substr(pivot+1, value.size()).c_str());
-      signature = dividend / divisor;
+      signature = beatsPerBar / (double) divisor;
 		} else if (parameter == "WAVFILE") {
       wavFile = value;
       song = new Sound(wavFile);
@@ -158,4 +161,6 @@ void RhythmLevel::loadFile(const string levelFileName) {
   //derived 
 	std::cout << "Total points:" << " - " << data.size() << std::endl;
   std::cout << "Time per beat in seconds:" << " - " << timePerBeat << std::endl;
+  std::cout << "BEATS PER BAR:" << " - " << beatsPerBar << std::endl;
+  std::cout << "Time per arrow in seconds:" << " - " << timePerArrow << std::endl;
 }

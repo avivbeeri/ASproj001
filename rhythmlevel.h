@@ -52,9 +52,11 @@ class RhythmLevel {
     string artistName;
     unsigned int bpm;
     string wavFile;
+		int beatsPerBar;
     double signature;
-    unsigned int resolution;
+    int resolution;
     double timePerBeat;
+    double timePerArrow;
 
     //game data
     vector<Tuple> data;
