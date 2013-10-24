@@ -31,7 +31,7 @@ class RhythmLevel {
     void begin();
     void end();
     bool levelComplete();
-    unsigned int getTimeRemaining() { return songLength - songPosition; }
+    double getTimeRemaining() { return song->getLength() - song->getPosition(); }
   private: 
     void loadFile(const string levelFile);
     
@@ -40,10 +40,8 @@ class RhythmLevel {
     Timeout timeout;
 
 		bool playing;
-    unsigned int ticks;
 		double barTime;
-    unsigned int songLength;
-    unsigned int songPosition;
+    double songLength;
     unsigned short enemyHP;
     //some song data storage of some sort
     

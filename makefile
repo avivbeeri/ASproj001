@@ -21,6 +21,8 @@ tuple.o: tuple.h
 
 beat.o: beat.h entity.h inputmanager.h globals.h
 
+sound.o: sound.h globals.h
+
 globals.o: globals.h inputmanager.h sprite.h 
 
 bitmap.o: bitmap.h drawable.h
@@ -32,8 +34,6 @@ entity.o: entity.h drawable.h
 drawable.o: drawable.h
 
 inputmanager.o: inputmanager.h globals.h
-
-sound.o: sound.h
 
 player.o: player.h
 

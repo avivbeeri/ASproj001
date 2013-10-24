@@ -20,6 +20,7 @@ extern Sprite * leftArrowSprite;
 extern Sprite * rightArrowSprite;
 extern Sprite * downArrowSprite;
 extern Sprite * upArrowSprite;
+extern int uToInt(unsigned int x);
 
 class InputManager;
 extern InputManager * inputManager;

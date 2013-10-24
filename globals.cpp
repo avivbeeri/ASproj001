@@ -20,3 +20,13 @@ Sprite * upArrowSprite;
 Sprite * downArrowSprite;
 
 InputManager * inputManager;
+
+
+int uToInt(unsigned int x) {
+  if (x <= INT_MAX)
+    return static_cast<int>(x);
+
+  if (x >= INT_MIN)
+    return static_cast<int>(x - INT_MIN) + INT_MIN;
+  throw x;
+}

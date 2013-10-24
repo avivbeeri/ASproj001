@@ -1,4 +1,5 @@
 #include "sound.h"
+#include "globals.h"
 
 Sound::Sound(const string filename) {
 
@@ -15,7 +16,8 @@ Sound::~Sound() {
 
 bool Sound::play(ALLEGRO_PLAYMODE mode) {
   playing = al_play_sample(sample, 1.0, 0.0, 1.0, mode, &id);
-	return playing;
+	timeStarted = al_get_time();
+  return playing;
 }
 
 void Sound::stop() {
@@ -25,7 +27,13 @@ void Sound::stop() {
 	}
 }
 
-unsigned int Sound::getLength() {
-  return (al_get_sample_length(sample)  / al_get_sample_frequency(sample));
+double Sound::getLength() {
+  int length = uToInt(al_get_sample_length(sample));
+  int frequency = uToInt(al_get_sample_frequency(sample));
+  return length / (double) frequency;
 //  return 1;
+}
+
+double Sound::getPosition() {
+  return al_get_time() - timeStarted;
 }

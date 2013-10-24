@@ -13,10 +13,12 @@ class Sound {
 		~Sound();
 		bool play(ALLEGRO_PLAYMODE mode = ALLEGRO_PLAYMODE_ONCE);
 	  void stop();
-	  unsigned int getLength();
+	  double getLength();
+	  double getPosition();
     bool isPlaying() { return playing; }
   private:
 	  bool playing;
+    double timeStarted;
     ALLEGRO_SAMPLE *sample;
     ALLEGRO_SAMPLE_ID id;
 };

@@ -21,15 +21,7 @@ RhythmLevel::~RhythmLevel() {
 void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
   timeout.onEvent(ev);
   if (ev.type == ALLEGRO_EVENT_TIMER) {
-    ticks++;
-    
-    if (ticks >= FPS) {
-      songPosition++;
-      ticks = 0;
-    }
-     
-	  
-    if (songPosition >= songLength) {
+    if (song->getPosition() >= songLength) {
       song->stop();
       playing = false;
 		}
@@ -50,14 +42,12 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
 }
 
 bool RhythmLevel::levelComplete() {
-  return (enemyHP == 0) || (songPosition == songLength);
+  return (enemyHP == 0) || (song->getPosition() >= songLength);
 }
 
 void RhythmLevel::reset() {
-  songPosition = 0;
   enemyHP = 15;
   playing = false;
-  ticks = 0;
   barTime = 0;
   manager.reset();
 }
@@ -99,8 +89,6 @@ void RhythmLevel::loadFile(const string levelFileName) {
 		if (currentLine == "#DATA") {
       //rhythm data begins here
       data.resize(barCount * resolution, Tuple(EMPTY, EMPTY, EMPTY, EMPTY));
-		  std::cout << timePerBeat * beatsPerBar << std::endl;
-			std::cout << beatsPerBar / (double) resolution << std::endl;
 			timePerArrow = timePerBeat * (beatsPerBar / (double)resolution);
 			continue;
 		}
