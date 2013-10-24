@@ -20,18 +20,19 @@ RhythmLevel::~RhythmLevel() {
 
 void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
   timeout.onEvent(ev);
-  if (ev.type == ALLEGRO_EVENT_TIMER) {
-    if (song->getPosition() >= songLength) {
-      song->stop();
-      playing = false;
-		}
-  }
   if (timeout.done()) {
     playing = true;
   }
 	if (playing) {
+    if (song->getPosition() >= songLength) {
+      song->stop();
+      playing = false;
+    }
 		if (tupleIterator >= data.end()) {
 			tupleIterator = data.begin();
+      playing = false;
+      timeout.setTimeout(0.3);
+      timeout.start();
 			barTime = al_get_time();
 		} else if (al_get_time() - barTime >= timePerArrow) {
 			manager.emitTuple(*tupleIterator, timePerBeat);

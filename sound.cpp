@@ -35,5 +35,8 @@ double Sound::getLength() {
 }
 
 double Sound::getPosition() {
+  if (al_get_time() > getLength()) {
+    playing = false;
+  }
   return al_get_time() - timeStarted;
 }
