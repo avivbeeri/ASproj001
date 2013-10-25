@@ -37,6 +37,7 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
 		manager.emitTuple(*tupleIterator, timePerBeat);
 		if (tupleIterator != data.end()) {
 		  tupleIterator++;
+		  currentArrow++;
 		}
 		barTime = al_get_time();
 	  }
@@ -53,9 +54,11 @@ void RhythmLevel::reset() {
   barTime = 0;
   playthroughNo = 0;
   manager.reset();
+  
 }
 
 void RhythmLevel::begin() {
+  currentArrow = 0;
   tupleIterator = data.begin();
   playthroughNo++;
   song->play(ALLEGRO_PLAYMODE_LOOP);
@@ -95,6 +98,7 @@ void RhythmLevel::loadFile(const string levelFileName) {
       //rhythm data begins here
       data.resize(barCount * resolution, Tuple(EMPTY, EMPTY, EMPTY, EMPTY));
 			timePerArrow = timePerBeat * (beatsPerBar / (double)resolution);
+			//timeout.setTimeout(timePerBeat * beatsPerBar);
 			continue;
 		}
 
@@ -134,6 +138,7 @@ void RhythmLevel::loadFile(const string levelFileName) {
 		  resolution = atoi(value.c_str());	
 		} else if (parameter == "DELAY") {
 		  timeout.setTimeout(atof(value.c_str()));	
+		  delay = atof(value.c_str());
 		} else if (parameter == "BARS") {
 		  barCount = atoi(value.c_str());	
 		} else if (parameter == "SIGNATURE") {
