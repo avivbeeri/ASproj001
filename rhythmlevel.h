@@ -39,8 +39,9 @@ class RhythmLevel {
     Sound * song;
     Timeout timeout;
 
-		bool playing;
-		double barTime;
+    bool playing;
+    double barTime;
+	unsigned int playthroughNo;
     double songLength;
     unsigned short enemyHP;
     //some song data storage of some sort
@@ -50,7 +51,7 @@ class RhythmLevel {
     string artistName;
     unsigned int bpm;
     string wavFile;
-		int beatsPerBar;
+    int beatsPerBar;
     double signature;
     int resolution;
     double timePerBeat;

@@ -4,10 +4,10 @@ RhythmLevel::RhythmLevel(const string levelName, BeatManager &m):
   manager(m),
   song(NULL),
   timeout(0),
-  barTime(0)
+  barTime(0),
+  playthroughNo(0)
 {
   loadFile(levelName);
-  tupleIterator = data.begin();
   reset();
 }
 
@@ -24,36 +24,40 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
     playing = true;
   }
 	if (playing) {
-    if (song->getPosition() >= songLength) {
-      song->stop();
-      playing = false;
-    }
-		if (tupleIterator >= data.end()) {
-			tupleIterator = data.begin();
-      playing = false;
-      timeout.setTimeout(0.3);
-      timeout.start();
-			barTime = al_get_time();
-		} else if (al_get_time() - barTime >= timePerArrow) {
-			manager.emitTuple(*tupleIterator, timePerBeat);
-			tupleIterator++;
-			barTime = al_get_time();
+      if (song->getPosition() >= song->getLength()) {
+        //song->stop();
+		if (playthroughNo < 2) {  
+	      playing = false;
+		  this->begin();
+		} else {
+		  song->stop();
 		}
+      }
+	  if (al_get_time() - barTime >= timePerArrow) {
+		manager.emitTuple(*tupleIterator, timePerBeat);
+		if (tupleIterator != data.end()) {
+		  tupleIterator++;
+		}
+		barTime = al_get_time();
+	  }
 	}
 }
 
 bool RhythmLevel::levelComplete() {
-  return (enemyHP == 0) || (song->getPosition() >= songLength);
+  return (enemyHP == 0) || (song->getPosition() >= song->getLength() && playthroughNo >= 2);
 }
 
 void RhythmLevel::reset() {
   enemyHP = 15;
   playing = false;
   barTime = 0;
+  playthroughNo = 0;
   manager.reset();
 }
 
 void RhythmLevel::begin() {
+  tupleIterator = data.begin();
+  playthroughNo++;
   song->play(ALLEGRO_PLAYMODE_LOOP);
   timeout.start();
   
@@ -140,7 +144,7 @@ void RhythmLevel::loadFile(const string levelFileName) {
 		} else if (parameter == "WAVFILE") {
       wavFile = value;
       song = new Sound(wavFile);
-      songLength = song->getLength() * 2;
+      songLength = song->getLength();
 		}
     		
 	} 
