@@ -30,7 +30,7 @@ void RhythmLevel::onEvent(ALLEGRO_EVENT ev) {
 	      playing = false;
 		  this->begin();
 		} else {
-		  song->stop();
+		  this->end();
 		}
       }
 	  if (al_get_time() - barTime >= timePerArrow) {
