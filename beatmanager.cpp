@@ -5,7 +5,7 @@
 
 BeatManager::BeatManager(RhythmPlayer &p, unsigned int oset):
   player(p),	
-	offset(oset)
+  offset(oset)
 {}
 
 BeatManager::~BeatManager() {
@@ -17,6 +17,12 @@ void BeatManager::reset() {
   while (!activeBeats.empty()) {
     Beat * ptr = activeBeats.front();
 		activeBeats.pop_front();
+		delete ptr;
+  }
+
+  while (!inactiveBeats.empty()) {
+    Beat * ptr = inactiveBeats.front();
+		inactiveBeats.pop_front();
 		delete ptr;
   }
 }
@@ -55,7 +61,8 @@ void BeatManager::onEvent(ALLEGRO_EVENT e) {
       } else {
         //player.heal(1);
       }
-      delete oldBeat;
+	  inactiveBeats.push_back(oldBeat);
+      //delete oldBeat;
       
     }
     beatIterator++;
