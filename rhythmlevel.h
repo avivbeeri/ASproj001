@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <cmath>
 #include <allegro5/allegro.h>
 
 #include "timeout.h"
