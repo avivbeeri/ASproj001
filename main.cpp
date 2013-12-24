@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 				//Check the pass/fail conditions
 				if (!player.isAlive() || level.levelComplete()) {
 					state = GAMEOVER;
-				  level.end();
+				    level.end();
         }
 			} else if (state == GAMEOVER) {
 			  
@@ -197,7 +197,7 @@ int main(int argc, char **argv)
 				if (inputManager->isPressed(ESCAPE)) {
 					//quit the game or return to the menu, when there is a menu
 					state = GAMEOVER;
-          level.end();
+                    level.end();
 				} else if (inputManager->isPressed(SPACE)) {
           player.heal(100);
 				}
@@ -234,7 +234,8 @@ int main(int argc, char **argv)
 				if (player.isAlive()) {
 					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 0,0, "HP: %u", player.getHP()); 
 					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 80,0, "Time remaining: %f", level.getTimeRemaining()); 
-
+					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 100,0, "Current arrow: %f", level.getArrowPoint());
+					al_draw_textf(font16, al_map_rgb(255,255,255), 400, 120,0, "Current time: %f", level.getTimePoint());
 				 }
 				//draw entities
 

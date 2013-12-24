@@ -18,13 +18,14 @@ class BeatManager {
     ~BeatManager();
     void draw();
     void reset();
-		void onEvent(ALLEGRO_EVENT e);
-		void emitTuple(Tuple t, double timePerBeat);
+	void onEvent(ALLEGRO_EVENT e);
+	void emitTuple(Tuple t, double timePerBeat);
 	private:
     list<Beat *> activeBeats;
-		RhythmPlayer &player;
+	list<Beat *> inactiveBeats;
+	RhythmPlayer &player;
     unsigned int offset;
-		unsigned int time;
+	unsigned int time;
     int HEIGHT;
     int WIDTH;
     int directionTest;

@@ -32,6 +32,8 @@ class RhythmLevel {
     void end();
     bool levelComplete();
     double getTimeRemaining() { return song->getLength() - song->getPosition(); }
+	double getTimePoint() { return floor(100*(song->getPosition()))/100; }
+	double getArrowPoint() { return floor(100*(delay + (timePerArrow * currentArrow))) / 100; }
   private: 
     void loadFile(const string levelFile);
     
@@ -39,8 +41,11 @@ class RhythmLevel {
     Sound * song;
     Timeout timeout;
 
-		bool playing;
-		double barTime;
+	int currentArrow;
+    bool playing;
+    double barTime;
+	double delay;
+	unsigned int playthroughNo;
     double songLength;
     unsigned short enemyHP;
     //some song data storage of some sort
@@ -50,7 +55,7 @@ class RhythmLevel {
     string artistName;
     unsigned int bpm;
     string wavFile;
-		int beatsPerBar;
+    int beatsPerBar;
     double signature;
     int resolution;
     double timePerBeat;
